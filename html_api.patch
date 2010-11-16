@@ -1,0 +1,10 @@
+532a533,541
+> 				# Import Bugs
+> 				if ( access_has_project_level( config_get( 'import_issues_threshold' ) ) ) {
+> 					if ( ALL_PROJECTS != helper_get_current_project() ) {
+> 						$t_menu_options[] = '<a href="import_issues_page.php">' . lang_get( 'manage_import_issues_link' ) . '</a>';
+> 					} else {
+> 						$t_menu_options[] = '<a href="login_select_proj_page.php?ref=import_issues_page.php">' . lang_get( 'manage_import_issues_link' ) . '</a>';
+> 					}
+> 				}
+> 
