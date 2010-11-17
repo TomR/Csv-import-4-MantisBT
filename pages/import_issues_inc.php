@@ -175,4 +175,10 @@
 	function explode_enum_string( $p_enum_string ) {
 		return explode( ',', $p_enum_string );
 	} 
-?>
+	# --------------------
+	# Given one num:value pair it will return both in an array
+	# num will be first (element 0) value second (element 1)
+	function explode_enum_arr( $p_enum_elem ) {
+		return explode( ':', $p_enum_elem );
+	} 
+	?>
