@@ -1,7 +1,7 @@
 <?php
 auth_reauthenticate();
 access_ensure_global_level( config_get( 'manage_plugin_threshold' ) );
-html_page_top1( lang_get( 'csv_import_title' ) );
+html_page_top1( plugin_lang_get( 'title' ) );
 html_page_top2();
 print_manage_menu();
 ?>
@@ -10,7 +10,7 @@ print_manage_menu();
 <table align="center" class="width75" cellspacing="1">
 <tr>
 	<td class="form-title" colspan="3">
-		<?php echo lang_get( 'csv_import_title' ) . ': ' . lang_get( 'csv_import_config' ) ?>
+		<?php echo plugin_lang_get( 'title' ) . ': ' . plugin_lang_get( 'config' ) ?>
 	</td>
 </tr>
 
@@ -30,7 +30,7 @@ print_manage_menu();
 
 <tr>
 	<td class="center" colspan="3">
-		<input type="submit" class="button" value="<?php echo lang_get( 'csv_update_config' ) ?>" />
+		<input type="submit" class="button" value="<?php echo plugin_lang_get( 'update_config' ) ?>" />
 	</td>
 </tr>
 

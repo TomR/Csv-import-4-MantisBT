@@ -1,9 +1,13 @@
 Mantis Issue Importer
 =====================
 
-(inspired from the importer posted by "ave")
-
-This version of csv Import is extended by Udo Sommer (adjusted by Cas Nuy).
+Version | Author                 | Action
+------------------------------------------
+ 1.1.3  | Stéphane Veyret        | Make the strings "private" with plugin_lang_get
+        |                        | Add french version
+ 1.1.2  | Udo Sommer and Cas Nuy | Transformed into plugin
+ 1.0    | Stéphane Veyret        | Improvements
+(old)   | ave                    | Importer creation
 
 The licence of CSV Import remains untouched, means GPL,
 as stated in THE GPL.

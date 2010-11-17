@@ -13,7 +13,7 @@ require_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'import_issues_inc.php
 # Check a project is selected
 $g_project_id = helper_get_current_project();
 if( $g_project_id == ALL_PROJECTS ) {
-	trigger_error( ERROR_IMPORT_ALL_PROJECT, ERROR );
+	plugin_error( ERROR_ALL_PROJECT, ERROR );
 };
 
 # Get submitted data
@@ -29,16 +29,16 @@ $t_file_content = array();
 if( file_exists( $f_import_file ) ) {
 	$t_file_content = read_csv_file( $f_import_file );
 } else 	{
-	error_parameters( lang_get( 'import_error_file_not_found' ) );
-	trigger_error( ERROR_IMPORT_FILE_FORMAT1, ERROR );
+	error_parameters( plugin_lang_get( 'error_file_not_found' ) );
+	plugin_error( ERROR_FILE_FORMAT, ERROR );
 };
 
 # Check given parameters - Columns
 if( count( $f_columns ) <= 0 ) {
 	trigger_error( ERROR_EMPTY_FIELD, ERROR );
 } 	elseif( count( $f_columns ) != count( array_unique( $f_columns ) ) ) {
-	error_parameters( lang_get( 'import_error_col_multiple' ) );
-	trigger_error( ERROR_IMPORT_FILE_FORMAT2, ERROR );
+	error_parameters( plugin_lang_get( 'error_col_multiple' ) );
+	plugin_error( ERROR_FILE_FORMAT, ERROR );
 };
 
 // print_r(array_values($t_file_content));
@@ -89,33 +89,20 @@ foreach( $t_file_content as $t_file_row ) {
         $t_default->due_date = date('Y-m-d');
 	} else {
 		if( !bug_exists( $t_bug_id ) ) {
-			$t_error_messages .= sprintf( lang_get( 'import_error_bug_not_exist' ), $t_bug_id) . '<br />';
+			$t_error_messages .= sprintf( plugin_lang_get( 'error_bug_not_exist' ), $t_bug_id) . '<br />';
 			$t_failure_count++;
 			continue;
 		};
 		$t_default = bug_get( $t_bug_id, true );
 		if( $t_default->project_id != $g_project_id ) {
-			$t_error_messages .= sprintf( lang_get( 'import_error_bug_bad_project' ), $t_bug_id) . '<br />';
+			$t_error_messages .= sprintf( plugin_lang_get( 'error_bug_bad_project' ), $t_bug_id) . '<br />';
 			$t_failure_count++;
 			continue;
 		};
 	};
- 
-/*
-print_r(array_values($t_file_row));
-echo'*';
-print_r(array_values($f_columns));
-echo'*';
-$t_column = array_isearch( 'summary', $f_columns );
-echo $t_column;
-echo '*';
-echo utf8_encode(trim( $t_file_row[$t_column] ));
-die('2');
-*/
- 
+
 	# Set bug data
 	$t_bug_data = new BugData;
-
 
 	$t_bug_data->project_id = $t_default->project_id;
 	$t_bug_data->reporter_id = get_user_column_value( 'reporter_id', $t_file_row, $t_default->reporter_id );
@@ -143,12 +130,10 @@ die('2');
 	$t_bug_data->sponsorship_total = $t_default->sponsorship_total;
 	$t_bug_data->profile_id = $t_default->profile_id;
 	$t_bug_data->due_date = get_date_column_value( 'due_date', $t_file_row, $t_default->due_date );
-
 	
 	$t_bug_data->description = get_column_value( 'description', $t_file_row, '' );
 	$t_bug_data->steps_to_reproduce =  get_column_value( 'steps_to_reproduce', $t_file_row, '' );
 	$t_bug_data->additional_information = get_column_value( 'additional_information', $t_file_row, '' );
-
 
 	# Create or update bug
 	if( !$t_bug_exists ) {
@@ -158,7 +143,7 @@ die('2');
 			$t_bug_id = 0;
 		}
 	}
-		
+
 	# Update other bug data
 	if( $t_bug_id ) {
 		# Variables
@@ -197,7 +182,7 @@ die('2');
                 
 			# Import value
 			if( !custom_field_set_value( $t_id, $t_bug_id, $t_value ) ) {
-				$t_error_messages .= sprintf( lang_get( 'import_error_custom_field' ), $t_def['name'], $t_bug_data->summary) . '<br />';
+				$t_error_messages .= sprintf( plugin_lang_get( 'error_custom_field' ), $t_def['name'], $t_bug_data->summary) . '<br />';
 				$t_error = true;
 			};
 		};
@@ -206,7 +191,7 @@ die('2');
 		if($t_error) $t_failure_count++;
 			else $t_success_count++;
 	} else {
-		$t_error_messages .= sprintf( lang_get( 'import_error' ), $t_bug_data->summary) . '<br />';
+		$t_error_messages .= sprintf( plugin_lang_get( 'error_any' ), $t_bug_data->summary) . '<br />';
 		$t_failure_count++;
 	continue;
 	};
@@ -224,8 +209,8 @@ html_page_top2();
 <?php
 echo $t_error_messages;
 if( $t_failure_count )
-	echo sprintf( lang_get( 'import_result_failure_ct' ), $t_failure_count) . '<br />';
-	echo sprintf( lang_get( $t_bug_exists ? 'import_result_update_success_ct' : 'import_result_import_success_ct' ),
+	echo sprintf( plugin_lang_get( 'result_failure_ct' ), $t_failure_count) . '<br />';
+	echo sprintf( plugin_lang_get( $t_bug_exists ? 'result_update_success_ct' : 'result_import_success_ct' ),
 	$t_success_count) . '<br />';
 	print_bracket_link( $t_redirect_url, lang_get( 'proceed' ) );
 ?>

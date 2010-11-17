@@ -1,39 +1,42 @@
 <?php
 
 # Custom strings for english language
-$s_csv_import_title		= "Mantis CSV Import Issues" ;
-$s_csv_import_config	= "Configuration" ;
-$s_csv_update_config	= "Update configuration";
+$s_plugin_Csv_import_title = 'Mantis CSV Importer';
+$s_plugin_Csv_import_description = 'Import CSV files as Mantis issues';
+$s_plugin_Csv_import_config = 'Configuration';
+$s_plugin_Csv_import_update_config = 'Update configuration';
 
 # Extensions by u.sommer
-$s_import_file_format_col_spacer = 'CSV column separator';
-$s_import_skip_blank_lines = 'Skip empty lines';
-$s_import_skip_blank_columns = 'Skip all columns following an empty header.';
+$s_plugin_Csv_import_file_format_col_spacer = 'CSV column separator';
+$s_plugin_Csv_import_skip_blank_lines = 'Skip empty lines';
+$s_plugin_Csv_import_skip_blank_columns = 'Skip all columns following an empty header.';
 
 # Import issues
-$s_manage_import_issues_link = 'Import issues from CSV file';
-$s_manage_import_issues = 'CSV Issues importing';
-$s_import_issues_file = "Import issues from CSV file";
-$s_import_issues_columns = 'File columns';
-$s_import_skip_first_line = 'Skip first file line';
-$s_import_file_button = 'Import file';
-$s_import_column_number = 'Column #%d';
-$s_import_result_failure_ct = 'Encountered errors for %d issues';
-$s_import_result_import_success_ct = '%d issues successfully imported';
-$s_import_result_update_success_ct = '%d issues successfully updated';
-$s_import_error_nolines = 'there must be at least one line of data to import';
-$s_import_error_noseparator = 'each line must have the separator "%s"';
-$s_import_error_manycols = 'too many columns in the file';
-$s_import_error_col_count = 'each line must have the same "%s" separator count';
-$s_import_error_file_not_found = 'file not found';
-$s_import_error_col_multiple = 'same column defined more than once';
-$s_import_error_bug_not_exist = 'The bug %d does not exist';
-$s_import_error_bug_bad_project = 'The bug %d is not in the current project';
-$s_import_error = 'Error while treating the bug "%s"';
-$s_import_error_custom_field = 'Error while importing custom field "%s" for the bug "%s"';
+$s_plugin_Csv_import_manage_issues_link = 'Import CSV file';
+$s_plugin_Csv_import_manage_issues = 'CSV importing';
+$s_plugin_Csv_import_issues_file = 'Import issues from CSV file';
+$s_plugin_Csv_import_issues_columns = 'File columns';
+$s_plugin_Csv_import_skip_first_line = 'Skip first file line';
+$s_plugin_Csv_import_file_button = 'Import file';
+$s_plugin_Csv_import_column_number = 'Column #%d';
+$s_plugin_Csv_import_result_failure_ct = 'Encountered errors for %d issues';
+$s_plugin_Csv_import_result_import_success_ct = '%d issues successfully imported';
+$s_plugin_Csv_import_result_update_success_ct = '%d issues successfully updated';
+$s_plugin_Csv_import_error_nolines = 'there must be at least one line of data to import';
+$s_plugin_Csv_import_error_empty_header = 'there must not be empty header if skipping first line';
+$s_plugin_Csv_import_error_noseparator = 'each line must have the separator "%s"';
+$s_plugin_Csv_import_error_manycols = 'too many columns in the file';
+$s_plugin_Csv_import_error_col_count = 'each line must have the same "%s" separator count';
+$s_plugin_Csv_import_error_file_not_found = 'file not found';
+$s_plugin_Csv_import_error_file_not_writable = 'cannot write file';
+$s_plugin_Csv_import_error_file_not_opened = 'cannot open file';
+$s_plugin_Csv_import_error_col_multiple = 'same column defined more than once';
+$s_plugin_Csv_import_error_bug_not_exist = 'The bug %d does not exist';
+$s_plugin_Csv_import_error_bug_bad_project = 'The bug %d is not in the current project';
+$s_plugin_Csv_import_error_any = 'Error while treating the bug "%s"';
+$s_plugin_Csv_import_error_custom_field = 'Error while importing custom field "%s" for the bug "%s"';
 
 # Errors
-$MANTIS_ERROR[ERROR_IMPORT_ALL_PROJECT] = 'A project must be selected to import issues';
-$MANTIS_ERROR[ERROR_IMPORT_FILE_FORMAT1] = 'Imported file format not found: %s';
-$MANTIS_ERROR[ERROR_IMPORT_FILE_FORMAT2] = 'Duplicate columns: %s';
-$MANTIS_ERROR[ERROR_IMPORT_FILE_ERROR] = 'There was an error with the file itself';
+$MANTIS_ERROR[plugin_Csv_import_ERROR_ALL_PROJECT] = 'A project must be selected to import issues';
+$MANTIS_ERROR[plugin_Csv_import_ERROR_FILE_FORMAT] = 'Incorrect imported file format: %s';
+$MANTIS_ERROR[plugin_Csv_import_ERROR_FILE] = 'There was an error with the file itself';

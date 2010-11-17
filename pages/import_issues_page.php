@@ -2,7 +2,7 @@
 	# Mantis - a php based bugtracking system
 	require_once( 'core.php' );
 	access_ensure_project_level( plugin_config_get( 'import_issues_threshold' ) );
-	html_page_top1( lang_get( 'manage_import_issues' ) );
+	html_page_top1( plugin_lang_get( 'manage_issues' ) );
 	html_page_top2();
 	$import_it		= plugin_page('import_issues');
 	$import_page 	= plugin_page('import_issues_page');
@@ -24,7 +24,7 @@
             <tr>
             	<td class="form-title" colspan="2">
 <?php
-                    echo lang_get( 'import_issues_file' )
+                    echo plugin_lang_get( 'issues_file' )
 ?>
             	</td>
             </tr>
@@ -33,7 +33,7 @@
                     <input name="edt_cell_separator" type="text" size="15" maxlength="1" value="<?php echo config_get( 'csv_separator' )?>" style="text-align:center">
                 </td>
                 <td>
-                    <?php echo lang_get( 'import_file_format_col_spacer' ) ?>
+                    <?php echo plugin_lang_get( 'file_format_col_spacer' ) ?>
                 </td>
             </tr>
             <tr class="row-1">
@@ -41,7 +41,7 @@
                     <input type="checkbox" name="cb_skip_first_line" value="1" checked>
                 </td>
                 <td>
-                    <?php echo lang_get( 'import_skip_first_line' ) ?>
+                    <?php echo plugin_lang_get( 'skip_first_line' ) ?>
                 </td>
             </tr>
 
@@ -50,7 +50,7 @@
                     <input type="checkbox" 	name="cb_skip_blank_lines"	value="1" checked>
                 </td>
                 <td>
-                    <?php echo lang_get( 'import_skip_blank_lines' ) ?>
+                    <?php echo plugin_lang_get( 'skip_blank_lines' ) ?>
                 </td>
             </tr>
 
@@ -59,7 +59,7 @@
                     <input type="checkbox" 	name="cb_trim_blank_cols" value="1" checked>
                 </td>
                 <td colspan="4">
-                    <?php echo lang_get( 'import_skip_blank_columns' ) ?>
+                    <?php echo plugin_lang_get( 'skip_blank_columns' ) ?>
                 </td>
             </tr>
 
@@ -100,8 +100,8 @@
 		$t_column_title = array();
 		if( count( $t_file_content ) <= 0 )
 		{
-			error_parameters( lang_get( 'import_error_nolines' ) );
-			trigger_error( ERROR_IMPORT_FILE_FORMAT, ERROR );
+			error_parameters( plugin_lang_get( 'error_nolines' ) );
+			plugin_error( ERROR_FILE_FORMAT, ERROR );
 		};
 
         $t_file_line_num = -1;
@@ -113,13 +113,13 @@
             {
                 if( count( $t_elements ) <= 1 )
                 {
-                    error_parameters( sprintf( lang_get( 'import_error_noseparator' ),  $t_separator) );
-                    trigger_error( ERROR_IMPORT_FILE_FORMAT, ERROR );
+                    error_parameters( sprintf( plugin_lang_get( 'error_noseparator' ),  $t_separator) );
+                    plugin_error( ERROR_FILE_FORMAT, ERROR );
                 }
                 elseif( count( $t_elements ) > count( $g_all_fields ) )
                 {
-                    error_parameters( lang_get( 'import_error_manycols' ) );
-                    trigger_error( ERROR_IMPORT_FILE_FORMAT, ERROR );
+                    error_parameters( plugin_lang_get( 'error_manycols' ) );
+                    plugin_error( ERROR_FILE_FORMAT, ERROR );
                 }
                 elseif 
                 (
@@ -129,8 +129,8 @@
                     if( $t_skip_first )
                     {
                         
-                        error_parameters(  'LANG: Wenn SkipFirst aktiv ist, dürfen Spaltenheader nicht leer sein!' );
-                        trigger_error( ERROR_IMPORT_FILE_FORMAT, ERROR );
+                        error_parameters( plugin_lang_get('error_empty_header' ) );
+                        plugin_error( ERROR_FILE_FORMAT, ERROR );
                     }
                     else
                     {
@@ -162,8 +162,8 @@
                 }
                 else
                 {
-                    error_parameters( sprintf( lang_get( 'import_error_col_count' ),  $t_separator) );
-                    trigger_error( ERROR_IMPORT_FILE_FORMAT, ERROR );
+                    error_parameters( sprintf( plugin_lang_get( 'error_col_count' ),  $t_separator) );
+                    plugin_error( ERROR_FILE_FORMAT, ERROR );
                 };
             };
 
@@ -180,30 +180,30 @@
             };
         };
 
-        if( is_writable($f_import_file['tmp_name']) )
+        if( is_writable( $f_import_file['tmp_name'] ) )
         {
-            if( $handle = fopen($f_import_file['tmp_name'],"wb") )
+            if( $handle = fopen( $f_import_file['tmp_name'], "wb" ) )
             {
                 foreach( $t_file_content as &$t_file_line )
                 {
-                    $t_written = fwrite( $handle , $t_file_line."\n" );
+                    $t_written = fwrite( $handle , $t_file_line . "\n" );
                 };
                 fclose( $handle );
             }
             else
             {
-                error_parameters( 'LANG: Das Handle auf die CSV-Datei ist ungültig. Gelöscht?' );
-                trigger_error( ERROR_IMPORT_FILE_ERROR, ERROR );
+                error_parameters( plugin_lang_get( 'error_file_not_opened' ) );
+                plugin_error( ERROR_FILE_FORMAT, ERROR );
             };
         }
         else
         {
-            error_parameters( 'LANG: Die Datei ist schreibgeschützt!' );
-            trigger_error( ERROR_IMPORT_FILE_ERROR, ERROR );
+            error_parameters( plugin_lang_get( 'error_file_not_writable' ) );
+            plugin_error( ERROR_FILE_FORMAT, ERROR );
         };
 
 		# Move file
-        $t_file_name = tempnam( '', 'tmp' );
+		$t_file_name = tempnam( '', 'tmp' );
 		move_uploaded_file( $f_import_file['tmp_name'], $t_file_name );
 
 		# Column analysis
@@ -252,7 +252,7 @@
         if( !$t_skip_first )
         {
 ?>
-            <td><?php echo sprintf( lang_get( 'import_column_number' ),  $i + 1) ?></td>
+            <td><?php echo sprintf( plugin_lang_get( 'column_number' ),  $i + 1) ?></td>
 <?php
         }
         else
@@ -305,7 +305,7 @@
 	<form method="post" action="<?php echo $import_it ?>">
 	<tr>
 		<td class="form-title" colspan="2">
-			<?php echo lang_get( 'import_issues_columns' ) ?>
+			<?php echo plugin_lang_get( 'issues_columns' ) ?>
 		</td>
 	</tr>
 <?php
@@ -317,7 +317,7 @@
     			<?php
                     if( !$t_skip_first )  
                     {
-                        echo sprintf( lang_get( 'import_column_number' ),  $i + 1);
+                        echo sprintf( plugin_lang_get( 'column_number' ),  $i + 1);
                     }
                     else
                     {
@@ -343,7 +343,7 @@
             <input type="hidden" name="edt_cell_separator" value="<?php echo $t_separator ?>" />
 
 			<input type="hidden" name="import_file" value="<?php echo $t_file_name ?>" />
-			<input type="submit" class="button" value="<?php echo lang_get( 'import_file_button' ) ?>" />
+			<input type="submit" class="button" value="<?php echo plugin_lang_get( 'file_button' ) ?>" />
 		</td>
 	</tr>
 	</form>

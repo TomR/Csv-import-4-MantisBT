@@ -2,56 +2,57 @@
 	# The current project
 	$g_project_id = helper_get_current_project();
 	if( $g_project_id == ALL_PROJECTS )
-    {
-		trigger_error( ERROR_IMPORT_ALL_PROJECT, ERROR );
+	{
+		plugin_error( ERROR_ALL_PROJECT, ERROR );
 	}
 
 	# This identify a custom field
 	$g_custom_field_identifier = 'custom_';
- 
-    if( config_is_set('csv_import_columns') )
-    {
-        $g_all_fields = array();
-        $g_all_fields = config_get( 'csv_import_columns' );
-    };
+
+  # All column names that can be used with this project
+	$g_all_fields = array();
+	if( config_is_set( 'csv_import_columns' ) )	{
+		$g_all_fields = config_get( 'csv_import_columns' );
+	};
+  if( count( $g_all_fields ) == 0 )
+  {
+		$g_all_fields = array(
+			'additional_information',
+			'build',
+			'category',
+			'date_submitted',
+			'description',
+			'due_date',
+			'eta',
+			'fixed_in_version',
+			'handler_id',
+			'id',
+			'last_updated',
+			'os',
+			'os_build',
+			'platform',
+			'priority',
+			'projection',
+			'reporter_id',
+			'reproducibility',
+			'resolution',
+			'severity',
+			'status',
+			'steps_to_reproduce',
+			'summary',
+			'target_version',
+			'version',
+			'view_state',
+		);
+	}
+	$g_all_fields = array_unique($g_all_fields);
     
-    $g_all_fields = array(
-        'additional_information',
-        'build',
-        'category',
-        'date_submitted',
-        'description',
-		'due_date',
-        'eta',
-        'fixed_in_version',
-        'handler_id',
-        'id',
-        'last_updated',
-        'os',
-        'os_build',
-        'platform',
-        'priority',
-        'projection',
-        'reporter_id',
-        'reproducibility',
-        'resolution',
-        'severity',
-        'status',
-        'steps_to_reproduce',
-        'summary',
-        'target_version',
-        'version',
-        'view_state',
-    );
-    
-    $g_all_fields = array_unique($g_all_fields);
-    
-    foreach( custom_field_get_linked_ids( $g_project_id ) as $t_id )
-    {
-        $g_all_fields[] =
-            $g_custom_field_identifier . custom_field_get_field( $t_id, 'name' );
-    };
-    $g_all_fields[] = 'ignore_column'; # @@@ u.sommer added
+	foreach( custom_field_get_linked_ids( $g_project_id ) as $t_id )
+	{
+		$g_all_fields[] =
+			$g_custom_field_identifier . custom_field_get_field( $t_id, 'name' );
+	};
+	$g_all_fields[] = 'ignore_column'; # @@@ u.sommer added
 	$g_all_fields = prepare_all_fields_array( $g_all_fields );
 
 	# --------------------
@@ -61,12 +62,12 @@
 
 		# Correspondance between field names and language identifiers
 		$t_translated_fields = array(
-            'reporter_id' => 'reporter',
-            'last_updated' => 'updated',
-            'handler_id' => 'assigned_to',
-            'os_build' => 'os_version',
-            'version' => 'product_version',
-            'view_state' => 'view_status',
+			'reporter_id' => 'reporter',
+			'last_updated' => 'updated',
+			'handler_id' => 'assigned_to',
+			'os_build' => 'os_version',
+			'version' => 'product_version',
+			'view_state' => 'view_status',
 		);
 
 		# Create the translated array
