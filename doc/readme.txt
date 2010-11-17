@@ -6,6 +6,10 @@ _________
 
 Version | Author                 | Action
 --------------------------------------------------------------------------------------
+ 1.2.0  | lionheart33806         | import_issues_page.php splitted to become
+        |                        |  import_issues_page_init.php and import_issues_page_col_set.php
+        |                        | Can create unknown categories
+        |                        | Little JS to use tab as separator
  1.1.5  | lionheart33806         | Code closer of mantis coding conventions
         |                        | "all projects" categories reusable
         |                        | Can import "submitted date" with DD/MM/YYYY format

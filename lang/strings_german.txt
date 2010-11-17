@@ -12,7 +12,9 @@ $s_plugin_Csv_import_skip_blank_lines = 'leere Zeilen auslassen';
 $s_plugin_Csv_import_skip_blank_columns = 'alle Spalten, die einem leeren Eintrag folgen, auslassen';
 
 # Extensions by lionheart33806
-$s_plugin_Csv_import_use_alt_regexp = 'Alternate import because of doubles quotes';
+$s_plugin_Csv_import_use_alt_regexp = 'Alternative import because of doubles quotes';
+$s_plugin_Csv_import_create_unknown_cats = 'Create unknown categories';
+$s_plugin_Csv_import_tab_csv_separator = 'Use tab';
 
 # Import issues
 $s_plugin_Csv_import_manage_issues_link = 'CSV Datei imporierten';
@@ -29,7 +31,7 @@ $s_plugin_Csv_import_error_nolines = 'Es muss mindestens eine Zeile zu importier
 $s_plugin_Csv_import_error_empty_header = 'there must not be empty header if skipping first line';
 $s_plugin_Csv_import_error_noseparator = 'Jede Zeile muss das Trennzeichen "%s" enthalten';
 $s_plugin_Csv_import_error_manycols = 'Die Datei hat zu viele Spalten';
-$s_plugin_Csv_import_error_col_count = 'Jede Zeile muss die Gleiche Anzahl des Trennzeichens  "%s" enthalten';
+$s_plugin_Csv_import_error_col_count = 'Jede Zeile muss die Gleiche Anzahl des Trennzeichens "%s" enthalten';
 $s_plugin_Csv_import_error_file_not_found = 'Datei konnte nicht gefunden werden';
 $s_plugin_Csv_import_error_file_not_writable = 'cannot write file';
 $s_plugin_Csv_import_error_file_not_opened = 'cannot open file';

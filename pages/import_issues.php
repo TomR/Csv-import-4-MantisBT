@@ -18,6 +18,7 @@ if( $g_project_id == ALL_PROJECTS ) {
 
 # Get submitted data
 $g_use_alt_regexp = gpc_get_bool( 'cb_use_alt_regexp' );
+$f_create_unknown_cats = gpc_get_bool( 'cb_create_unknown_cats' );
 $f_import_file = gpc_get_string( 'import_file' );
 $f_columns = gpc_get_string_array( 'columns' );
 $f_skip_first = gpc_get_bool( 'cb_skip_first_line' );
@@ -54,6 +55,7 @@ $t_bug_exists = array_isearch( 'id', $f_columns );
 helper_begin_long_process( );
 
 foreach( $t_file_content as $t_file_row ) {
+   
 	# Check if first row skipped
 	if( $t_first_run && $f_skip_first ) {
 		$t_first_run = false;
@@ -72,8 +74,12 @@ foreach( $t_file_content as $t_file_row ) {
 
 	# Set default parameters
 	if( !$t_bug_exists ) {
+	   // Category
+	   $t_cat_val =  trim ( get_column_value( 'category', $t_file_row ) );
+	   $t_cat_val = ($f_create_unknown_cats && $t_cat_val != '') ? $t_cat_val : 'csv_imported';
+
 		$t_default->project_id = $g_project_id;
-		$t_default->category_id = get_csv_import_category_id($g_project_id,'csv_imported' );
+		$t_default->category_id = get_csv_import_category_id($g_project_id, $t_cat_val);
 		$t_default->reporter_id = auth_get_current_user_id();
 		$t_default->priority = config_get( 'default_bug_priority' );
 		$t_default->severity = config_get( 'default_bug_severity' );
@@ -229,4 +235,3 @@ print_bracket_link( $t_redirect_url, lang_get( 'proceed' ) );
 
 <?php
 html_page_bottom1( __FILE__ );
-

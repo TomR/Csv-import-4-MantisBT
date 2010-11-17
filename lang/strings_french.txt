@@ -13,6 +13,8 @@ $s_plugin_Csv_import_skip_blank_columns = 'Ignorer toutes les colonnes avec un e
 
 # Extensions by lionheart33806
 $s_plugin_Csv_import_use_alt_regexp = 'Import alternatif à cause des guillements';
+$s_plugin_Csv_import_create_unknown_cats = 'Créer automatiquement les catégories inconnues';
+$s_plugin_Csv_import_tab_csv_separator = 'Utiliser la tabulation';
 
 # Import issues
 $s_plugin_Csv_import_manage_issues_link = 'Importer un fichier CSV';

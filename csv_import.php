@@ -4,7 +4,7 @@ class Csv_importPlugin extends MantisPlugin
 	function register() {
 		$this->name = plugin_lang_get( 'title' );
 		$this->description = plugin_lang_get( 'description' );
-		$this->version = '1.1.3';
+		$this->version = '1.2.0';
 		$this->requires = array( 'MantisCore' => '1.2.0' );
 		$this->author = 'Udo Sommer, see readme for further details!';
 		$this->contact = '';
@@ -26,7 +26,7 @@ class Csv_importPlugin extends MantisPlugin
 
 	function csv_import_menu() {
 		return array(
-			'<a href="' . plugin_page( 'import_issues_page' ) . '">' . plugin_lang_get( 'manage_issues_link' ) . '</a>',
+			'<a href="' . plugin_page( 'import_issues_page_init' ) . '">' . plugin_lang_get( 'manage_issues_link' ) . '</a>',
 		);
 	}
 }
