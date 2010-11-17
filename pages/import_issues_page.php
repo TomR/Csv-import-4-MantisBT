@@ -4,7 +4,9 @@
 	access_ensure_project_level( plugin_config_get( 'import_issues_threshold' ) );
 	html_page_top1( lang_get( 'manage_import_issues' ) );
 	html_page_top2();
-?>
+	$import_it		= plugin_page('import_issues');
+	$import_page 	= plugin_page('import_issues_page');
+	?>
 <br />
 <?php
     require_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'import_issues_inc.php' );
@@ -16,7 +18,7 @@
 		$t_max_file_size = (int)min( ini_get_number( 'upload_max_filesize' ), ini_get_number( 'post_max_size' ),
 		 config_get( 'max_file_size' ) );
 ?>
-<form method="post" enctype="multipart/form-data" action="<?php echo plugin_page('import_issues_page')?>">
+<form method="post" enctype="multipart/form-data" action="<?php echo $import_page ?>">
     <div align="center">
         <table class="width50" cellspacing="1">
             <tr>
@@ -300,7 +302,7 @@
 <!-- Set fields form -->
 <div align="center">
 <table class="width50" cellspacing="1">
-	<form method="post" action="<?php echo plugin_page('import_issues')?>">
+	<form method="post" action="<?php echo $import_it ?>">
 	<tr>
 		<td class="form-title" colspan="2">
 			<?php echo lang_get( 'import_issues_columns' ) ?>
@@ -351,6 +353,4 @@
 <?php
 	} # Step 2, select fields
 
-?>
-
-<?php html_page_bottom1( __FILE__ ) ?>
+html_page_bottom1( __FILE__ ) ;

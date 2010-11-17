@@ -1,9 +1,4 @@
 <?php
-	# Mantis - a php based bugtracking system
-?>
-<?php
-	require_once( 'core.php' ) ;
-
 	# The current project
 	$g_project_id = helper_get_current_project();
 	if( $g_project_id == ALL_PROJECTS )
@@ -13,7 +8,6 @@
 
 	# This identify a custom field
 	$g_custom_field_identifier = 'custom_';
-	
  
     if( config_is_set('csv_import_columns') )
     {
@@ -22,32 +16,32 @@
     };
     
     $g_all_fields = array(
-        'reporter_id',
-        'summary',
-        'description',
-        'steps_to_reproduce',
         'additional_information',
+        'build',
         'category',
-        'priority',
-        'severity',
-        'reproducibility',
         'date_submitted',
-        'last_updated',
+        'description',
+		'due_date',
+        'eta',
+        'fixed_in_version',
         'handler_id',
-        'status',
-        'resolution',
+        'id',
+        'last_updated',
         'os',
         'os_build',
         'platform',
-        'version',
+        'priority',
         'projection',
-        'eta',
-        'fixed_in_version',
+        'reporter_id',
+        'reproducibility',
+        'resolution',
+        'severity',
+        'status',
+        'steps_to_reproduce',
+        'summary',
         'target_version',
-        'build',
+        'version',
         'view_state',
-        'id',
-		'due_date',
     );
     
     $g_all_fields = array_unique($g_all_fields);
@@ -181,4 +175,90 @@
 	function explode_enum_arr( $p_enum_elem ) {
 		return explode( ':', $p_enum_elem );
 	} 
-	?>
+	
+	function array_isearch( $str , $array ) {
+    foreach($array as $k => $v)  {
+			if(strcasecmp($str, $v) == 0) return $k;
+        };
+        return false;
+}
+    
+#-----------------------
+function get_enum_column_value( $p_name, $p_row, $p_default ) {
+	$t_value = get_column_value( $p_name, $p_row );
+	if( is_blank( $t_value ) ) return $p_default;
+	# First chance, search element in language enumeration string
+	$t_element_enum_string = lang_get( $p_name . '_enum_string' );
+	$t_arr = explode_enum_string( $t_element_enum_string );
+	$t_arr_count = count( $t_arr );
+	for( $i = 0; $i < $t_arr_count; $i++ ) {
+		$elem_arr = explode_enum_arr( $t_arr[$i] );
+		if( $elem_arr[1] == $t_value ) {
+			return $elem_arr[0];
+		} elseif( $elem_arr[0] == $t_value )  {
+            	return $elem_arr[0];
+        };
+	};
+
+	# Second chance, search element in configuration enumeration string
+	$t_element_enum_string = config_get( $p_name . '_enum_string' );
+	$t_arr = explode_enum_string( $t_element_enum_string );
+	$t_arr_count = count( $t_arr );
+	for( $i = 0; $i < $t_arr_count; $i++ ) {
+		$elem_arr = explode_enum_arr( $t_arr[$i] );
+		if( $elem_arr[1] == $t_value ) {
+			return $elem_arr[0];
+		} elseif( $elem_arr[0] == $t_value )  {
+           	return $elem_arr[0];
+        };
+	};
+    return $p_default;
+}
+
+#-----------------------
+function get_date_column_value( $p_name, $p_row, $p_default ) {
+		$t_date = get_column_value( $p_name, $p_row );
+		return is_blank( $t_date ) ? $p_default : strtotime( $t_date );
+}
+    
+
+function string_MkPretty( $t_str ) {
+    	$t_str = utf8_encode(strtolower(trim(utf8_decode($t_str))));
+    	$t_str = preg_replace('/\xfc/ui', 'ue', $t_str);
+    	$t_str = preg_replace('/\xf6/ui', 'oe', $t_str);
+    	$t_str = preg_replace('/\xe4/ui', 'ae', $t_str);
+    	$t_str = preg_replace('/\xdf/ui', 'ss', $t_str);
+        $t_str = preg_split('/[^(\w\-)]+/', $t_str);       
+        return $t_str[0];
+}    
+    
+
+function get_user_column_value( $p_name, $p_row, $p_default ) {
+		$t_username = get_column_value( $p_name, $p_row );
+        if( is_blank( $t_username ) )  return $p_default;
+        if( ($t_user_id = user_get_id_by_name($t_username)) !== false ) return $t_user_id; 
+        $t_username = string_MkPretty($t_username);
+        if( ($t_user_id = user_get_id_by_name($t_username)) !== false )  return $t_user_id;         
+        if( user_create( $t_username , $t_username ) ) return user_get_id_by_name($t_username);
+        return $p_default;
+}
+
+#-----------------------
+function get_column_value( $p_name, $p_row, $p_default = '' ) {
+		global $f_columns;
+		$t_column = array_isearch( $p_name, $f_columns );
+		return ( ($t_column === false) || (!isset( $p_row[$t_column] )) ) ? $p_default : utf8_encode(trim( $p_row[$t_column] ));
+}
+
+#-----------------------
+function column_value_exists( $p_name, $p_row ) {
+		global $f_columns;
+		$t_column = array_isearch( $p_name, $f_columns );
+		return (($t_column != false) && (isset( $p_row[$t_column] ))) ? true : false;
+}
+
+function get_category_column_value( $p_name, $p_row, $p_project, $p_default ) {
+        $t_category_id = category_get_id_by_name_ne ( trim ( get_column_value( $p_name, $p_row ) ) , $p_project );
+        return (($t_category_id === false) ? $p_default : $t_category_id);
+}      
+    

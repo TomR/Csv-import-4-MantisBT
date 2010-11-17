@@ -4,7 +4,7 @@ class Csv_importPlugin extends MantisPlugin
 	function register() {
 		$this->name			= 'Csv_import' ;
 		$this->description	= 'import CSV file';
-		$this->version		= '1.1.1';
+		$this->version		= '1.1.2';
 		$this->requires   	= array('MantisCore'       => '1.2.0',);
 		$this->author		= 'Udo Sommer, see readme for further details!';
 		$this->contact		= '';

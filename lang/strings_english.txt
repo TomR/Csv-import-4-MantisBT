@@ -34,6 +34,6 @@ $s_import_error_custom_field = 'Error while importing custom field "%s" for the 
 
 # Errors
 $MANTIS_ERROR[ERROR_IMPORT_ALL_PROJECT] = 'A project must be selected to import issues';
-$MANTIS_ERROR[ERROR_IMPORT_FILE_FORMAT] = 'Imported file format is incorrect: %s';
+$MANTIS_ERROR[ERROR_IMPORT_FILE_FORMAT1] = 'Imported file format not found: %s';
+$MANTIS_ERROR[ERROR_IMPORT_FILE_FORMAT2] = 'Duplicate columns: %s';
 $MANTIS_ERROR[ERROR_IMPORT_FILE_ERROR] = 'There was an error with the file itself';
-?>
