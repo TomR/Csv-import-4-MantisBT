@@ -2,9 +2,14 @@
 
 # Custom strings for english language
 
+# Extensions by u.sommer
+$s_import_file_format_col_spacer = 'CSV column separator';
+$s_import_skip_blank_lines = 'Skip empty lines';
+$s_import_skip_blank_columns = 'Skip all columns following an empty header.';
+
 # Import issues
-$s_manage_import_issues_link = 'Import issues';
-$s_manage_import_issues = 'Issues importing';
+$s_manage_import_issues_link = 'Import issues from CSV file';
+$s_manage_import_issues = 'CSV Issues importing';
 $s_import_issues_file = "Import issues from CSV file";
 $s_import_issues_columns = 'File columns';
 $s_import_skip_first_line = 'Skip first file line';
@@ -27,5 +32,5 @@ $s_import_error_custom_field = 'Error while importing custom field "%s" for the 
 # Errors
 $MANTIS_ERROR[ERROR_IMPORT_ALL_PROJECT] = 'A project must be selected to import issues';
 $MANTIS_ERROR[ERROR_IMPORT_FILE_FORMAT] = 'Imported file format is incorrect: %s';
-
+$MANTIS_ERROR[ERROR_IMPORT_FILE_ERROR] = 'There was an error with the file itself';
 ?>
