@@ -11,6 +11,9 @@ $s_plugin_Csv_import_file_format_col_spacer = 'CSV column separator';
 $s_plugin_Csv_import_skip_blank_lines = 'Skip empty lines';
 $s_plugin_Csv_import_skip_blank_columns = 'Skip all columns following an empty header.';
 
+# Extensions by lionheart33806
+$s_plugin_Csv_import_use_alt_regexp = 'Alternate import because of doubles quotes';
+
 # Import issues
 $s_plugin_Csv_import_manage_issues_link = 'Import CSV file';
 $s_plugin_Csv_import_manage_issues = 'CSV importing';

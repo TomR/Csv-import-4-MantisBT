@@ -1,16 +1,40 @@
 Mantis Issue Importer
 =====================
 
+History:
+_________
+
 Version | Author                 | Action
-------------------------------------------
+--------------------------------------------------------------------------------------
+ 1.1.5  | lionheart33806         | Code closer of mantis coding conventions
+        |                        | "all projects" categories reusable
+        |                        | Can import "submitted date" with DD/MM/YYYY format
+        |                        | Checkbox for alternative import
+        |                        |     because of double quotes
+        |                        | Added helper_begin_long_process() for very long imports
+ 1.1.4  | Stéphane Veyret        | Add german version of jojow 
  1.1.3  | Stéphane Veyret        | Make the strings "private" with plugin_lang_get
         |                        | Add french version
  1.1.2  | Udo Sommer and Cas Nuy | Transformed into plugin
  1.0    | Stéphane Veyret        | Improvements
 (old)   | ave                    | Importer creation
 
+
+Know Issues:
+____________
+
+* "ignore_column" can only be used once.
+
+
+Licence:
+_________
+
 The licence of CSV Import remains untouched, means GPL,
 as stated in THE GPL.
+
+
+Installation:
+_____________
 
 Installation instructions are the same as installing a plugin.
 
@@ -26,11 +50,6 @@ _____________
 
 Made for and tested against Mantis version 1.2.0
 
-
-Installation:
-_____________
-
-1. Install as any other plugin.
 
 Usage:
 ______

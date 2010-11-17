@@ -11,6 +11,9 @@ $s_plugin_Csv_import_file_format_col_spacer = 'Séparateur de colonnes CSV';
 $s_plugin_Csv_import_skip_blank_lines = 'Ignorer les lignes vides';
 $s_plugin_Csv_import_skip_blank_columns = 'Ignorer toutes les colonnes avec un en-tête vide';
 
+# Extensions by lionheart33806
+$s_plugin_Csv_import_use_alt_regexp = 'Import alternatif à cause des guillements';
+
 # Import issues
 $s_plugin_Csv_import_manage_issues_link = 'Importer un fichier CSV';
 $s_plugin_Csv_import_manage_issues = 'Import CSV';

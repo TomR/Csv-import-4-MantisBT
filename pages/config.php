@@ -13,8 +13,6 @@ print_manage_menu();
 		<?php echo plugin_lang_get( 'title' ) . ': ' . plugin_lang_get( 'config' ) ?>
 	</td>
 </tr>
-
-
 <tr <?php echo helper_alternate_class() ?>>
 	<td class="category">
 		<?php echo lang_get( 'access_level' ) ?>
@@ -25,9 +23,6 @@ print_manage_menu();
 		</select>
 	</td>
 </tr> 
-
-
-
 <tr>
 	<td class="center" colspan="3">
 		<input type="submit" class="button" value="<?php echo plugin_lang_get( 'update_config' ) ?>" />
