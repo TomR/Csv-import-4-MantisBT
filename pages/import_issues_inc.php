@@ -14,15 +14,7 @@
 	# This identify a custom field
 	$g_custom_field_identifier = 'custom_';
 	
-    # All column names that can be used with this project
-    #@@@ u.sommer: I've done changes in configuration system for this plugin.
-    #       I think, it is better to save this option as an DB config entry.
-    #
-    #       ToDo: Initial configuration of options in database. At the moment i've done this by hand.
-    #
-    #       Currently the array "csv_import_columns" is empty, i don't know a need for changing this,
-    #       because the functionality of custom fields is allready implemented. 
-    #       Nevertheless I let the possibillity for making changes to the array untouched, but now through "adm_config_report.php".
+ 
     if( config_is_set('csv_import_columns') )
     {
         $g_all_fields = array();
@@ -55,6 +47,7 @@
         'build',
         'view_state',
         'id',
+		'due_date',
     );
     
     $g_all_fields = array_unique($g_all_fields);
@@ -137,9 +130,6 @@
 		return array_map( 'csv_string_unescape', $t_row_element[1] );
 	}
 
-	#@@@ u.sommer added: category_api extension.
-    #       If you want to know more about this function, look for "category_get_id_by_name()" in category_api.php 
-    #       (Sorry for copy'n'pasting, but sometimes i need a simple "false" more than a triggered error.)
 	function category_get_id_by_name_ne( $p_category_name, $p_project_id )
     {
 
@@ -157,17 +147,11 @@
 		return db_result( $t_result );
 	}
     
-    #@@@ u.sommern added
-    #       For some reason the new Firefox (Version 3.0.3) has a problem with the charset my test-file is encoded with. Especially the german Umlaute are troublemakers.
-    #       Even the MS IE 6.0.2800 has this problem. I tried to save the test-file in a multibyte encoding (UTF-8),
-    #       but instantly after appeared an other problem:
-    #       Most of PHPs functions aren't complient with UTF-8, not even with other multibyte charsets and this results in improperly working CSV file functions.
     function prepare_output( $t_string , $t_encode_only = false )
     {
         return string_html_specialchars( utf8_encode($t_string) );
     }
  
-    #@@@ u.sommer added
     function get_csv_import_category_id( $t_project_id , $t_category_name )  
     {
         project_ensure_exists( $t_project_id );
@@ -185,4 +169,10 @@
         # Just in case...
         return null;
     }
+	
+		# --------------------
+	# Breaks up an enum string into num:value elements
+	function explode_enum_string( $p_enum_string ) {
+		return explode( ',', $p_enum_string );
+	} 
 ?>

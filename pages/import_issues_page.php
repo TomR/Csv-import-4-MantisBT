@@ -1,31 +1,21 @@
 <?php
 	# Mantis - a php based bugtracking system
-
 	require_once( 'core.php' );
-
-	access_ensure_project_level( config_get( 'import_issues_threshold' ) );
-
+	access_ensure_project_level( plugin_config_get( 'import_issues_threshold' ) );
 	html_page_top1( lang_get( 'manage_import_issues' ) );
 	html_page_top2();
 ?>
-
 <br />
-
 <?php
-    #@@@ u.sommer changed: "include( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'import_issues_inc.php' );"
     require_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'import_issues_inc.php' );
-
 	# Look if the import file name is in the posted data
 	$f_import_file = gpc_get_file( 'import_file', -1 );
-
 	# File is not given yet, ask for it
 	if( $f_import_file == -1 )
 	{
 		$t_max_file_size = (int)min( ini_get_number( 'upload_max_filesize' ), ini_get_number( 'post_max_size' ),
 		 config_get( 'max_file_size' ) );
 ?>
-
-<?php #@@@ u.sommer changed: "<form method="post" enctype="multipart/form-data" action="import_issues_page.php">" ?>
 <form method="post" enctype="multipart/form-data" action="<?php echo plugin_page('import_issues_page')?>">
     <div align="center">
         <table class="width50" cellspacing="1">
@@ -36,8 +26,6 @@
 ?>
             	</td>
             </tr>
-
-            <?php #@@@ u.sommer added ?>
             <tr class="row-1">
                 <td class="category" style="text-align:center">
                     <input name="edt_cell_separator" type="text" size="15" maxlength="1" value="<?php echo config_get( 'csv_separator' )?>" style="text-align:center">
@@ -46,13 +34,6 @@
                     <?php echo lang_get( 'import_file_format_col_spacer' ) ?>
                 </td>
             </tr>
-
-            <?php
-                # @@@ u.sommer added
-                #       What do we want to do: If one skips first line, the content of the first line is used as column header description.
-                #       If one does not want to skip first line, the previous format is used as column description.
-                #       ("Column # 1", "Column # 2", "Column # 3", and so on...)
-            ?>
             <tr class="row-1">
                 <td class="category" colspan="1" style="text-align:center">
                     <input type="checkbox" name="cb_skip_first_line" value="1" checked>
@@ -62,7 +43,6 @@
                 </td>
             </tr>
 
-            <?php #@@@ u.sommer added ?>
             <tr class="row-1">
                 <td class="category" colspan="1" style="text-align:center">
                     <input type="checkbox" 	name="cb_skip_blank_lines"	value="1" checked>
@@ -72,7 +52,6 @@
                 </td>
             </tr>
 
-            <?php #@@@ u.sommer added ?>
             <tr class="row-1">
                 <td class="category" style="text-align:center">
                     <input type="checkbox" 	name="cb_trim_blank_cols" value="1" checked>
@@ -99,7 +78,6 @@
 
 <?php
 	}
-
 	# File is defined, go to step 2
 	else
 	{
@@ -111,10 +89,10 @@
 
 		# File analysis
 		$t_file_content = read_csv_file( $f_import_file['tmp_name'] );
-		$t_separator = gpc_get_string('edt_cell_separator');        # @@@ u.sommer: added
-        $t_trim_columns = gpc_get_bool( 'cb_trim_blank_cols' );     # @@@ u.sommer: added
-        $t_trim_rows = gpc_get_bool( 'cb_skip_blank_lines' );       # @@@ u.sommer: added
-        $t_skip_first = gpc_get_bool( 'cb_skip_first_line' );       # @@@ u.sommer: added
+		$t_separator = gpc_get_string('edt_cell_separator');        
+        $t_trim_columns = gpc_get_bool( 'cb_trim_blank_cols' );  
+        $t_trim_rows = gpc_get_bool( 'cb_skip_blank_lines' );  
+        $t_skip_first = gpc_get_bool( 'cb_skip_first_line' );  
 
 		$t_column_count = -1;
 		$t_column_title = array();
@@ -141,34 +119,25 @@
                     error_parameters( lang_get( 'import_error_manycols' ) );
                     trigger_error( ERROR_IMPORT_FILE_FORMAT, ERROR );
                 }
-                elseif # @@@ u.sommer added
+                elseif 
                 (
-                    # @@@ u.sommer: The row is empty and the user wants to skip it...
                     $t_trim_rows && (trim(eregi_replace($t_separator , '' , implode($t_separator , $t_elements))) == '')
                 )
                 {
                     if( $t_skip_first )
                     {
-                        # @@@ u.sommer: If we are here, we can not skip the first line, even if the user wanted this.
-                        #       But if this is the case, we trigger an error because we are not able to get column descriptions.
-
-                        # ToDo: localization
-                        #error_parameters( lang_get( 'import_error_manycols' ) );
+                        
                         error_parameters(  'LANG: Wenn SkipFirst aktiv ist, dürfen Spaltenheader nicht leer sein!' );
                         trigger_error( ERROR_IMPORT_FILE_FORMAT, ERROR );
                     }
                     else
                     {
-                        # @@@ u.sommer: "Skip first" is not active, delete the line. 
-                        #       Here we can, because if $t_skip_first == false the standard descriptions are used. (
-                        #       ("Column # 1", "Cloumn # 2" , and so on.)
                         $t_file_line = null;
                     };
                 };
 
-                if( $t_trim_columns )   # @@@ u.sommer added
+                if( $t_trim_columns )   
                 {
-                    # @@@ u.sommer: All data from the first empty column header is skipped.
                     for( $i = 0 ; $i < count($t_elements) ; $i++ )
                     {
                         if( trim($t_elements[$i]) == '' )
@@ -185,8 +154,6 @@
             {
                 if( $t_trim_columns )   # @@@ u.sommer added
                 {
-                    # @@@ u.sommer: All data from the first empty column header will be skippt in all rows. (Cutting the table)
-                    //$t_elements = array_slice( $t_elements , 0 , $t_column_count );
                     $t_row = explode( $t_separator , $t_file_line );
                     $t_row = array_slice( $t_row , 0 , $t_column_count );
                     $t_file_line = implode( $t_separator , $t_row );
@@ -198,7 +165,7 @@
                 };
             };
 
-            if # @@@ u.sommer added
+            if
             (
                 trim(eregi_replace($t_separator , '' , implode($t_separator , $t_elements))) == ''
             )
@@ -207,12 +174,10 @@
                 {
                     unset( $t_file_content[$t_key] );
                     $t_file_content = array_merge($t_file_content);
-                    //$t_file_content = array_splice( $t_file_content , $t_file_line_num , 1 );
                 };
             };
         };
 
-        # @@@ u.sommer: write formated file back:
         if( is_writable($f_import_file['tmp_name']) )
         {
             if( $handle = fopen($f_import_file['tmp_name'],"wb") )
@@ -335,30 +300,12 @@
 <!-- Set fields form -->
 <div align="center">
 <table class="width50" cellspacing="1">
-    <?php
-    # @@@ u.sommer commented out. API function "plugin_page()" instead of direct linking.
-    #       <form method="post" action="import_issues.php">
-    ?>
 	<form method="post" action="<?php echo plugin_page('import_issues')?>">
 	<tr>
 		<td class="form-title" colspan="2">
 			<?php echo lang_get( 'import_issues_columns' ) ?>
 		</td>
 	</tr>
-
-    <?php
-    # @@@ u.sommer: Commented out. See the comment above "cb_skip_first_line"
-    /*
-	<tr <?php echo helper_alternate_class() ?>>
-		<td class="category">
-			<?php echo lang_get( 'import_skip_first_line' ); ?>
-		</td>
-		<td>
-			<input type="checkbox" name="skip_first" value="1" <?php check_checked( $t_title_is_fields ) ?> />
-		</td>
-	</tr>
-           */
-    ?>
 <?php
     for( $t_fields = $g_all_fields, $i = 0; $i < $t_column_count; next( $t_fields ), $i++ )
     {
@@ -366,13 +313,12 @@
     	<tr <?php echo helper_alternate_class() ?>>
     		<td class="category">
     			<?php
-                    if( !$t_skip_first )    # @@@ u.sommer added
+                    if( !$t_skip_first )  
                     {
                         echo sprintf( lang_get( 'import_column_number' ),  $i + 1);
                     }
                     else
                     {
-                        #echo string_html_entities($t_column_title[$i]);
                         echo prepare_output($t_column_title[$i]);
                     };
                 ?>
@@ -389,7 +335,6 @@
 	<tr>
 		<td>&nbsp;</td>
 		<td>
-            <?php # @@@ u.sommer: added following 4 lines ?>
             <input type="hidden" name="cb_skip_first_line" value="<?php echo $t_skip_first ?>" />
             <input type="hidden" name="cb_skip_blank_lines" value="<?php echo $t_trim_rows ?>" />
             <input type="hidden" name="cb_trim_blank_cols" value="<?php echo $t_trim_columns ?>" />

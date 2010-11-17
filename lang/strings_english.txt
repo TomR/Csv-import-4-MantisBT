@@ -1,6 +1,9 @@
 <?php
 
 # Custom strings for english language
+$s_csv_import_title		= "Mantis CSV Import Issues" ;
+$s_csv_import_config	= "Configuration" ;
+$s_csv_update_config	= "Update configuration";
 
 # Extensions by u.sommer
 $s_import_file_format_col_spacer = 'CSV column separator';

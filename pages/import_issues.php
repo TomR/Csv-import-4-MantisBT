@@ -8,16 +8,9 @@
 	require_once( $t_core_path . 'database_api.php' );    
     require_once( $t_core_path . 'user_api.php' );
     
-    #@@@ u.sommer: I've done changes in configuration system for this plugin.
-    #       I think, it is better to save this option as an DB config entry.
-    #       Now one can configure the import threshold through "adm_config_report.php"
-    #       ToDo: Initial configuration of options in database. At the moment i've done this by hand.
-    #
-    #       The int_value can be looked up in the language files, for e.g. "MANAGER" has in "strings_german.txt" the value 70.
+ 
     access_ensure_project_level( config_get( 'manage_site_threshold' ) );
-
-    #@@@ u.sommer: "require_once".
-	#include( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'import_issues_inc.php' );
+ 
     require_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'import_issues_inc.php' );
 
 	# Check a project is selected
@@ -59,9 +52,6 @@
 		trigger_error( ERROR_IMPORT_FILE_FORMAT, ERROR );
 	};
     
-    # @@@ u.sommer added.
-    #       See "http://de.php.net/manual/de/function.array-search.php#80578" for author.
-    #       (Thanks Fyorl!)
     function array_isearch( $str , $array ) {
         foreach($array as $k => $v) 
         {
@@ -112,17 +102,7 @@
             	return $elem_arr[0];
             };
 		};
-        
-		
-		#@@@ u.sommer changed: 
-        #       #  Last chance, try to use the numeric value
-        #       # return intval( $t_value );
-        #       In this case, we do not use the numeric value, because, if someone has a user defined state oder string in this column
-        #       which mantis is not aware of, we can not enum this and then it results in an "@0@" (null value),
-        #       or later on in bug view, mantis is not able to translate the enum value back to enum string.
-        #       Instead we use the default value.
-        #       For using the numeric value, see above chances, I've done a little work on it.
-        return $p_default;
+         return $p_default;
 	}
 
 	#-----------------------
@@ -132,7 +112,7 @@
 		return is_blank( $t_date ) ? $p_default : strtotime( $t_date );
 	}
     
-    #@@@ u.sommer added
+
     function string_MkPretty( $t_str )
     {
     	$t_str = utf8_encode(strtolower(trim(utf8_decode($t_str))));
@@ -141,29 +121,16 @@
     	$t_str = preg_replace('/\xf6/ui', 'oe', $t_str);
     	$t_str = preg_replace('/\xe4/ui', 'ae', $t_str);
     	$t_str = preg_replace('/\xdf/ui', 'ss', $t_str);
-        
-        # Disabled, because I do not want to check every char not of (\w \-), I only want to check until the first occurrence.
-        # To understand this you may look into your config_defaults_inc.php and seek for "$g_user_login_valid_regex"
-        #$t_str = preg_split(
-        #    config_get(user_login_valid_regex), 
-        #    $t_str
-        #);
-        
+ 
+         
         $t_str = preg_split('/[^(\w\-)]+/', $t_str);       
         return $t_str[0];
     }    
     
-	# @@@ u.sommer heavily edited
+
 	function get_user_column_value( $p_name, $p_row, $p_default )
 	{
-        # @@@ u.sommer extended for adding non existing users. Password is set to username,
-        #       Because of this, your users should, for security reason, review theyre accounts asap after import of csv-files!
-        #
-        #       Note:   User names are lowercase and are only valid if they consist of [\w\-]. For definition of [\w] so your RegExp implementation.
-        #                   string_MkPretty escapes Umlaute with there phonetical pendant and user names are trimmed from the first special 
-        #                   char (all not of [\w \-]) to the end of the string.
-        #                   E.g. Import of Username C3p-0.
-        #                       0> User has to log in with c3p-0\c3p-0 as login\password
+ 
 		$t_username = get_column_value( $p_name, $p_row );
         
         # print_r( $t_username ); echo "\n";
@@ -189,10 +156,7 @@
 		global $f_columns;
 
 		$t_column = array_isearch( $p_name, $f_columns );
-        #@@@ u.sommer changed: "return ( $t_column === false || !isset( $p_row[$t_column] ) ) ? $p_default : trim( $p_row[$t_column] );"
-        #       Here are occure some problems if we have a file which is not utf8 encoded. (For example ther are problems with the german Umlaute.)
-        #       I decided to utf8ify the return value in case that it is a string.
-        
+       
 		return ( ($t_column === false) || (!isset( $p_row[$t_column] )) ) ? $p_default : utf8_encode(trim( $p_row[$t_column] ));
 	}
 
@@ -219,8 +183,7 @@
 	}      
     
 	# Import file content
-    # @@@ u.sommer, we ask for this on import_issues_page.php, so get it over $_POST (see "Get submitted data")
-	# $f_separator = config_get( 'csv_separator' );
+ 
     $t_first_run = true;
 	$t_success_count = 0;
 	$t_failure_count = 0;
@@ -265,6 +228,7 @@
             $t_default->resolution = OPEN;
             $t_default->view_state = config_get( 'default_bug_view_status' );
             $t_default->profile_id = 0;
+            $t_default->due_date = date('Y-m-d');
 		}
 
 		# Check existing bug consistency
@@ -304,7 +268,7 @@
             $t_file_row, 
             $t_bug_data->project_id , 
             $t_default->category_id
-        );  # @@@ u.sommer edited
+        );  
 		$t_bug_data->priority =
             get_enum_column_value( 'priority', $t_file_row, $t_default->priority );
 		$t_bug_data->severity =
@@ -344,6 +308,8 @@
             get_enum_column_value( 'view_state', $t_file_row, $t_default->view_state );
 		$t_bug_data->sponsorship_total = $t_default->sponsorship_total;
 		$t_bug_data->profile_id = $t_default->profile_id;
+		$t_bug_data->due_date =
+            get_date_column_value( 'due_date', $t_file_row, $t_default->due_date );
         
 		# Create or update bug
 		if( !$t_bug_exists ) $t_bug_id = bug_create( $t_bug_data );
@@ -378,18 +344,14 @@
 				# Look if this field is set
 				$t_def = custom_field_get_definition( $t_id );
                 
-                #@@@ u.sommer added
-                #       Forgot the "custom_" ??? This has wasted 3 hours of debugging time - as far as debugging is possible with php. 8-/                
                 $t_custom_col_name = 'custom_'.$t_def['name'];
                 
-                #@@@ u.sommer changed: "if( !column_value_exists( $t_def['name'] , $t_file_row ) );"
 				if( !column_value_exists( $t_custom_col_name , $t_file_row ) )
                 {   
                     continue;
                 };
 
 				# Prepare value
-                #@@@ u.sommer changed: "$t_value = &get_column_value( $t_def['name'] , $t_file_row );"
 				$t_value = get_column_value( $t_custom_col_name , $t_file_row );
 				if( ($t_value != '') && ($t_def['type'] == CUSTOM_FIELD_TYPE_DATE) )
                 {
