@@ -267,10 +267,28 @@ function get_column_value( $p_name, $p_row, $p_default = '' ) {
 function column_value_exists( $p_name, $p_row ) {
 	global $f_columns;
 	$t_column = array_isearch( $p_name, $f_columns );
-	return (($t_column != false) && (isset( $p_row[$t_column] ))) ? true : false;
+	return (($t_column !== false) && (isset( $p_row[$t_column] ))) ? true : false;
 }
 
 function get_category_column_value( $p_name, $p_row, $p_project, $p_default ) {
 	$t_category_id = category_get_id_by_name_ne ( trim ( get_column_value( $p_name, $p_row ) ) , $p_project );
 	return (($t_category_id === false) ? $p_default : $t_category_id);
+}
+
+/**
+ * A more readable var_dump
+ *
+ * @param mixed
+ */
+function hvar_dump()
+{
+   $numargs = func_num_args();
+   $arg_list = func_get_args();
+   echo '<pre style="text-align: left;">';
+   for ($i = 0; $i < $numargs; $i++)
+   {
+        var_dump($arg_list[$i]);
+   }
+
+   echo '</pre>';
 }

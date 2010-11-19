@@ -25,6 +25,21 @@ $f_skip_first = gpc_get_bool( 'cb_skip_first_line' );
 $f_skip_blank_lines = gpc_get_bool( 'cb_skip_blank_lines' );
 $f_trim_columns = gpc_get_bool( 'cb_trim_blank_cols' );
 $f_separator = gpc_get_string('edt_cell_separator');
+$f_keys = gpc_get_string_array( 'cb_keys' );
+
+# Load custom field ids
+$t_linked_ids = custom_field_get_linked_ids( $g_project_id );
+
+# Get custom field id of primary keys
+foreach($t_linked_ids as $cf_id) {
+	$t_def = custom_field_get_definition($cf_id);
+	$t_custom_col_name = 'custom_'.$t_def['name'];
+
+	if(isset($f_keys[$t_custom_col_name]))
+	{
+		$f_keys[$t_custom_col_name] = $cf_id;
+	}
+}
 
 # Check given parameters - File
 $t_file_content = array();
@@ -43,19 +58,37 @@ if( count( $f_columns ) <= 0 ) {
 	plugin_error( ERROR_FILE_FORMAT, ERROR );
 }
 
-# Import file content
+# Some default values for filter
+$t_page_number = 1;
+$t_issues_per_page = 25;
+$t_page_count = 0;
+$t_issues_count = 0;
 
+# Import file content
 $t_first_run = true;
 $t_success_count = 0;
 $t_failure_count = 0;
 $t_error_messages = '';
 
-$t_bug_exists = array_isearch( 'id', $f_columns );
+# Determine import mode
+$t_import_mode = 'all_new';
+if(array_isearch( 'id', $f_columns ) !== false)
+{
+	$t_import_mode = 'by_id';
+}
+else
+{
+	if(count($f_keys) > 0)
+	{
+		$t_import_mode = 'by_keys';
+	}
+}
 
+# Let's go
 helper_begin_long_process( );
 
 foreach( $t_file_content as $t_file_row ) {
-   
+
 	# Check if first row skipped
 	if( $t_first_run && $f_skip_first ) {
 		$t_first_run = false;
@@ -65,18 +98,74 @@ foreach( $t_file_content as $t_file_row ) {
 	# Explode into elements
 	$t_file_row = read_csv_row( $t_file_row, $f_separator );
 
-	# Variables
-	if ($t_bug_exists){
-		$t_bug_id = get_column_value( 'id', $t_file_row );
+	# Get Id
+	$t_bug_id = null;
+	switch($t_import_mode)
+	{
+		case 'by_id' :
+			$t_bug_id = get_column_value( 'id', $t_file_row );
+			break;
+
+		case 'by_keys' :
+
+			$t_filter = filter_get_default();
+			$t_filter[FILTER_PROPERTY_HIDE_STATUS_ID] = array(
+				'0' => META_FILTER_ANY,
+			);
+
+			$t_values_for_error = array();
+			foreach($f_keys as $aKey => $v)
+			{
+				if(substr($aKey, 0, 7) != 'custom_')
+				{
+					$t_filter[$aKey] = array(get_column_value( $aKey, $t_file_row, '' ));
+					$t_values_for_error[] = $t_filter[$aKey][0];
+				}
+				else
+				{
+					$t_filter['custom_fields'][$v] = array(get_column_value( $aKey, $t_file_row, '' ));
+					$t_values_for_error[] = $t_filter['custom_fields'][$v][0];
+				}
+			}
+
+			$t_issues = filter_get_bug_rows( $t_page_number, $t_issues_per_page, $t_page_count, $t_issues_count, $t_filter );
+
+			switch($t_issues_count)
+			{
+				case 1:
+					$t_bug_id = $t_issues[0]->id;
+					break;
+				case 0:
+					$t_bug_id = null;
+					break;
+				default :
+					$t_bugs_id = array();
+					foreach($t_issues as $issue)
+					{
+						$t_bugs_id[] = $issue->id;
+					}
+
+					$t_error_messages .= sprintf( plugin_lang_get( 'error_keys' ), implode('/', $t_values_for_error),
+																										implode('/', $t_bugs_id)) . '<br />';
+					$t_failure_count++;
+					continue 3;
+			}
+			$i++;
+
+			break;
+
+		default :
+			$t_bug_id = null;
 	}
 
+	#Default bug will be with default values or bug values
 	$t_default = new BugData;
 
 	# Set default parameters
-	if( !$t_bug_exists ) {
-	   // Category
-	   $t_cat_val =  trim ( get_column_value( 'category', $t_file_row ) );
-	   $t_cat_val = ($f_create_unknown_cats && $t_cat_val != '') ? $t_cat_val : 'csv_imported';
+	if( $t_bug_id === null ) {
+		// Category
+		$t_cat_val =  trim ( get_column_value( 'category', $t_file_row ) );
+		$t_cat_val = ($f_create_unknown_cats && $t_cat_val != '') ? $t_cat_val : 'csv_imported';
 
 		$t_default->project_id = $g_project_id;
 		$t_default->category_id = get_csv_import_category_id($g_project_id, $t_cat_val);
@@ -104,10 +193,11 @@ foreach( $t_file_content as $t_file_row ) {
 			continue;
 		}
 	}
-
+	
 	# Set bug data
 	$t_bug_data = new BugData;
 
+	$t_bug_data->id = $t_bug_id;
 	$t_bug_data->project_id = $t_default->project_id;
 	$t_bug_data->reporter_id = get_user_column_value( 'reporter_id', $t_file_row, $t_default->reporter_id );
 	$t_bug_data->summary = get_column_value( 'summary', $t_file_row, $t_default->summary );
@@ -140,16 +230,16 @@ foreach( $t_file_content as $t_file_row ) {
 	$t_bug_data->additional_information = get_column_value( 'additional_information', $t_file_row, '' );
 
 	# Create or update bug
-	if( !$t_bug_exists ) {
+	if( $t_bug_id === null) {
 		$t_bug_id = $t_bug_data->create();
 	} else {
 		if( !$t_bug_data->update( true, ( false == $t_notify ) ) ){
-			$t_bug_id = 0;
+			$t_bug_id = null;
 		}
 	}
 
 	# Update other bug data
-	if( $t_bug_id ) {
+	if( $t_bug_id !== null ) {
 		# Variables
 		$t_error = false;
 		$t_default = bug_get( $t_bug_id, true );
@@ -177,7 +267,6 @@ foreach( $t_file_content as $t_file_row ) {
 		}
 
 		# Import custom fields
-		$t_linked_ids = custom_field_get_linked_ids( $g_project_id );
 		foreach( $t_linked_ids as &$t_id ) {
 			# Look if this field is set
 			$t_def = custom_field_get_definition( $t_id );
@@ -227,7 +316,7 @@ echo $t_error_messages;
 if( $t_failure_count ) {
 	echo sprintf( plugin_lang_get( 'result_failure_ct' ), $t_failure_count) . '<br />';
 }
-echo sprintf( plugin_lang_get( $t_bug_exists ? 'result_update_success_ct' : 'result_import_success_ct' ),
+echo sprintf( plugin_lang_get( $t_import_mode != 'all_new' ? 'result_update_success_ct' : 'result_import_success_ct' ),
 $t_success_count) . '<br />';
 print_bracket_link( $t_redirect_url, lang_get( 'proceed' ) );
 ?>

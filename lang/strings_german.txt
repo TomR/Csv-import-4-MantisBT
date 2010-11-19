@@ -15,6 +15,7 @@ $s_plugin_Csv_import_skip_blank_columns = 'alle Spalten, die einem leeren Eintra
 $s_plugin_Csv_import_use_alt_regexp = 'Alternative import because of doubles quotes';
 $s_plugin_Csv_import_create_unknown_cats = 'Create unknown categories';
 $s_plugin_Csv_import_tab_csv_separator = 'Use tab';
+$s_plugin_Csv_import_error_keys = 'The key "%s" exists on many bugs : %s';
 
 # Import issues
 $s_plugin_Csv_import_manage_issues_link = 'CSV Datei imporierten';

@@ -198,6 +198,9 @@
 		<td class="form-title" colspan="2">
 			<?php echo plugin_lang_get( 'issues_columns' ) ?>
 		</td>
+		<td>
+		Primary key
+		</td>
 	</tr>
 <?php
 	for( $t_fields = $g_all_fields, $i = 0; $i < $t_column_count; next( $t_fields ), $i++ ) {
@@ -218,6 +221,9 @@
 					<?php print_all_fields_option_list( $t_title_is_fields ? $t_column_title[$i] : key( $t_fields ) ) ?>
 				</select>
 			</td>
+			 <td>
+			   <input type="checkbox" name="cb_keys[<?php echo $t_column_title[$i]?>]" value="ok"/>
+			 </td>
 		</tr><?php
 	}
 ?>
