@@ -59,13 +59,13 @@ config_get( 'max_file_size' ) );
                <?php echo plugin_lang_get( 'skip_blank_columns' ) ?>
             </td>
          </tr>
-         
+
          <tr class="row-1">
             <td class="category" style="text-align:center">
-               <input type="checkbox" name="cb_use_alt_regexp" value="1"/>
+               <input type="checkbox" name="cb_use_alt_import" value="1"/>
             </td>
             <td colspan="4">
-               <?php echo plugin_lang_get( 'use_alt_regexp' ) ?>
+               <?php echo plugin_lang_get( 'use_alt_import' ) ?>
             </td>
          </tr>
 

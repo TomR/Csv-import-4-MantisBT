@@ -103,28 +103,44 @@ function csv_string_unescape( $p_string ) {
 }
 
 # --------------------
-function read_csv_file( $p_filename ) {
-	global $g_use_alt_regexp;
-	$t_regexp = $g_use_alt_regexp ?
-				'/\G((?:[^\r\n]+)+)[\r|\n]*/sm' :
-				'/\G((?:[^"\r\n]+|"[^"]*")+)[\r|\n]*/sm';
+function read_csv_file( $p_filename, $t_separator ) {
+	global $g_use_alt_import;
+	if( !$g_use_alt_import )
+	{echo 1;
+		$t_regexp = '/\G((?:[^"\r\n]+|"[^"]*")+)[\r|\n]*/sm';
 
-	$t_file_content = file_get_contents( $p_filename );
-	preg_match_all($t_regexp, $t_file_content, $t_file_rows);
-	return $t_file_rows[1];
+		$t_file_content = file_get_contents( $p_filename );
+		preg_match_all($t_regexp, $t_file_content, $t_file_rows);
+		return $t_file_rows[1];
+	}
+	else
+	{
+		$allLines = array();
+		$reader = new ReadCSV(fopen($p_filename, 'rb'), $t_separator);
+	  	while ($row = $reader->get_row()) {
+			$allLines[] = $row;
+  		}
+
+  		return $allLines;
+	}
 }
 
 # --------------------
 function read_csv_row( $p_file_row, $p_separator ) {
-	global $g_use_alt_regexp;
-	$t_regexp = $g_use_alt_regexp ?
-				'/\G(?:\A|\\' . $p_separator . ')((?!")[^\\' . $p_separator . ']+|(?:"[^"]*")*)/sm' :
-				'/\G(?:\A|\\' . $p_separator . ')([^"\\' . $p_separator . ']+|(?:"[^"]*")*)/sm';
+	global $g_use_alt_import;
+	if( !$g_use_alt_import )
+	{
+		$t_regexp = '/\G(?:\A|\\' . $p_separator . ')([^"\\' . $p_separator . ']+|(?:"[^"]*")*)/sm';
 
-	preg_match_all($t_regexp, $p_file_row, $t_row_element);
+		preg_match_all($t_regexp, $p_file_row, $t_row_element);
 
-	# Return result
-	return array_map( 'csv_string_unescape', $t_row_element[1] );
+		# Return result
+		return array_map( 'csv_string_unescape', $t_row_element[1] );
+	}
+	else
+	{
+		return $p_file_row;
+	}
 }
 
 function category_get_id_by_name_ne( $p_category_name, $p_project_id ) {

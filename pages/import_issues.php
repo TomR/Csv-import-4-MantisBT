@@ -9,6 +9,7 @@ require_once( $t_core_path . 'user_api.php' );
 require_once( $t_core_path . 'bug_api.php' );
 access_ensure_project_level( config_get( 'manage_site_threshold' ) );
 require_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'import_issues_inc.php' );
+require_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'ReadCSV.php' );
 
 # Check a project is selected
 $g_project_id = helper_get_current_project();
@@ -17,7 +18,7 @@ if( $g_project_id == ALL_PROJECTS ) {
 }
 
 # Get submitted data
-$g_use_alt_regexp = gpc_get_bool( 'cb_use_alt_regexp' );
+$g_use_alt_import = gpc_get_bool( 'cb_use_alt_import' );
 $f_create_unknown_cats = gpc_get_bool( 'cb_create_unknown_cats' );
 $f_import_file = gpc_get_string( 'import_file' );
 $f_columns = gpc_get_string_array( 'columns' );
@@ -44,7 +45,7 @@ foreach($t_linked_ids as $cf_id) {
 # Check given parameters - File
 $t_file_content = array();
 if( file_exists( $f_import_file ) ) {
-	$t_file_content = read_csv_file( $f_import_file );
+	$t_file_content = read_csv_file( $f_import_file, $f_separator );
 } else {
 	error_parameters( plugin_lang_get( 'error_file_not_found' ) );
 	plugin_error( ERROR_FILE_FORMAT, ERROR );
@@ -192,7 +193,7 @@ foreach( $t_file_content as $t_file_row ) {
 			continue;
 		}
 	}
-	
+
 	# Set bug data
 	$t_bug_data = new BugData;
 

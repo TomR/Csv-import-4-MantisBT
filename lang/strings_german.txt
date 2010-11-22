@@ -12,7 +12,7 @@ $s_plugin_Csv_import_skip_blank_lines = 'leere Zeilen auslassen';
 $s_plugin_Csv_import_skip_blank_columns = 'alle Spalten, die einem leeren Eintrag folgen, auslassen';
 
 # Extensions by lionheart33806
-$s_plugin_Csv_import_use_alt_regexp = 'Alternative import because of doubles quotes';
+$s_plugin_Csv_import_use_alt_import = 'Alternative import (RFC 4180 compliant)';
 $s_plugin_Csv_import_create_unknown_cats = 'Create unknown categories';
 $s_plugin_Csv_import_tab_csv_separator = 'Use tab';
 $s_plugin_Csv_import_error_keys = 'The key "%s" exists on many bugs : %s';

@@ -9,6 +9,7 @@
 <br />
 <?php
 	require_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'import_issues_inc.php' );
+	require_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'ReadCSV.php' );
 	# Look if the import file name is in the posted data
 	$f_import_file = gpc_get_file( 'import_file', -1 );
 
@@ -18,9 +19,9 @@
 	}
 
 	# File analysis
-   $g_use_alt_regexp = gpc_get_bool( 'cb_use_alt_regexp' );
-	$t_file_content = read_csv_file( $f_import_file['tmp_name'] );
+	$g_use_alt_import = gpc_get_bool( 'cb_use_alt_import' );
 	$t_separator = gpc_get_string('edt_cell_separator');
+	$t_file_content = read_csv_file( $f_import_file['tmp_name'], $t_separator );
 	$t_trim_columns = gpc_get_bool( 'cb_trim_blank_cols' );
 	$t_trim_rows = gpc_get_bool( 'cb_skip_blank_lines' );
 	$t_skip_first = gpc_get_bool( 'cb_skip_first_line' );
@@ -147,7 +148,7 @@
 <?php
 		# Display first file lines
 		$t_first_run = true;
-		$t_display_max = 3;
+		$t_display_max = 2000;
 
 		foreach( $t_file_content as &$t_file_line ) {
 			if( $t_first_run && $t_skip_first ) {
@@ -205,7 +206,7 @@
 				</select>
 			</td>
 			 <td>
-			   <input type="checkbox" name="cb_keys[<?php echo $t_column_title[$i]?>]" value="ok"/>
+				<input type="checkbox" name="cb_keys[<?php echo $t_column_title[$i]?>]" value="ok"/>
 			 </td>
 		</tr><?php
 	}
@@ -218,7 +219,7 @@
 			<input type="hidden" name="cb_skip_blank_lines" value="<?php echo $t_trim_rows ?>" />
 			<input type="hidden" name="cb_trim_blank_cols" value="<?php echo $t_trim_columns ?>" />
 			<input type="hidden" name="edt_cell_separator" value="<?php echo $t_separator ?>" />
-			<input type="hidden" name="cb_use_alt_regexp" value="<?php echo $g_use_alt_regexp ?>" />
+			<input type="hidden" name="cb_use_alt_import" value="<?php echo $g_use_alt_import ?>" />
 			<input type="hidden" name="cb_create_unknown_cats" value="<?php echo $t_create_unknown_cats ?>" />
 			<input type="hidden" name="import_file" value="<?php echo $t_file_name ?>" />
 			<input type="submit" class="button" value="<?php echo plugin_lang_get( 'file_button' ) ?>" />
