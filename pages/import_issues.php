@@ -17,7 +17,6 @@ if( $g_project_id == ALL_PROJECTS ) {
 }
 
 # Get submitted data
-$g_use_alt_regexp = gpc_get_bool( 'cb_use_alt_regexp' );
 $f_create_unknown_cats = gpc_get_bool( 'cb_create_unknown_cats' );
 $f_import_file = gpc_get_string( 'import_file' );
 $f_columns = gpc_get_string_array( 'columns' );

@@ -12,7 +12,6 @@ $s_plugin_Csv_import_skip_blank_lines = 'Ignorer les lignes vides';
 $s_plugin_Csv_import_skip_blank_columns = 'Ignorer toutes les colonnes avec un en-tête vide';
 
 # Extensions by lionheart33806
-$s_plugin_Csv_import_use_alt_regexp = 'Import alternatif à cause des guillements';
 $s_plugin_Csv_import_create_unknown_cats = 'Créer automatiquement les catégories inconnues';
 $s_plugin_Csv_import_tab_csv_separator = 'Utiliser la tabulation';
 $s_plugin_Csv_import_error_keys = 'La clé "%s" existe sur plusieurs bugs : %s';

@@ -18,7 +18,6 @@
 	}
 
 	# File analysis
-   $g_use_alt_regexp = gpc_get_bool( 'cb_use_alt_regexp' );
 	$t_file_content = read_csv_file( $f_import_file['tmp_name'] );
 	$t_separator = gpc_get_string('edt_cell_separator');
 	$t_trim_columns = gpc_get_bool( 'cb_trim_blank_cols' );
@@ -218,7 +217,6 @@
 			<input type="hidden" name="cb_skip_blank_lines" value="<?php echo $t_trim_rows ?>" />
 			<input type="hidden" name="cb_trim_blank_cols" value="<?php echo $t_trim_columns ?>" />
 			<input type="hidden" name="edt_cell_separator" value="<?php echo $t_separator ?>" />
-			<input type="hidden" name="cb_use_alt_regexp" value="<?php echo $g_use_alt_regexp ?>" />
 			<input type="hidden" name="cb_create_unknown_cats" value="<?php echo $t_create_unknown_cats ?>" />
 			<input type="hidden" name="import_file" value="<?php echo $t_file_name ?>" />
 			<input type="submit" class="button" value="<?php echo plugin_lang_get( 'file_button' ) ?>" />

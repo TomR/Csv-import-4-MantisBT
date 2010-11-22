@@ -104,10 +104,7 @@ function csv_string_unescape( $p_string ) {
 
 # --------------------
 function read_csv_file( $p_filename ) {
-	global $g_use_alt_regexp;
-	$t_regexp = $g_use_alt_regexp ?
-				'/\G((?:[^\r\n]+)+)[\r|\n]*/sm' :
-				'/\G((?:[^"\r\n]+|"[^"]*")+)[\r|\n]*/sm';
+	$t_regexp = '/\G((?:[^"\r\n]+|"[^"]*")+)[\r|\n]*/sm';
 
 	$t_file_content = file_get_contents( $p_filename );
 	preg_match_all($t_regexp, $t_file_content, $t_file_rows);
@@ -116,10 +113,7 @@ function read_csv_file( $p_filename ) {
 
 # --------------------
 function read_csv_row( $p_file_row, $p_separator ) {
-	global $g_use_alt_regexp;
-	$t_regexp = $g_use_alt_regexp ?
-				'/\G(?:\A|\\' . $p_separator . ')((?!")[^\\' . $p_separator . ']+|(?:"[^"]*")*)/sm' :
-				'/\G(?:\A|\\' . $p_separator . ')([^"\\' . $p_separator . ']+|(?:"[^"]*")*)/sm';
+	$t_regexp = '/\G(?:\A|\\' . $p_separator . ')([^"\\' . $p_separator . ']+|(?:"[^"]*")*)/sm';
 
 	preg_match_all($t_regexp, $p_file_row, $t_row_element);
 
