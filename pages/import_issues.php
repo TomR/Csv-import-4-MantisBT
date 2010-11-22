@@ -25,7 +25,7 @@ $f_skip_first = gpc_get_bool( 'cb_skip_first_line' );
 $f_skip_blank_lines = gpc_get_bool( 'cb_skip_blank_lines' );
 $f_trim_columns = gpc_get_bool( 'cb_trim_blank_cols' );
 $f_separator = gpc_get_string('edt_cell_separator');
-$f_keys = gpc_get_string_array( 'cb_keys' );
+$f_keys = gpc_get_string_array( 'cb_keys', array() );
 
 # Load custom field ids
 $t_linked_ids = custom_field_get_linked_ids( $g_project_id );
