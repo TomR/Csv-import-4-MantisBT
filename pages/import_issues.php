@@ -150,7 +150,6 @@ foreach( $t_file_content as $t_file_row ) {
 					$t_failure_count++;
 					continue 3;
 			}
-			$i++;
 
 			break;
 
