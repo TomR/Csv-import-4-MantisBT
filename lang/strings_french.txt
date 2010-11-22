@@ -20,7 +20,7 @@ $s_plugin_Csv_import_error_keys = 'La clé "%s" existe sur plusieurs bugs : %s';
 # Import issues
 $s_plugin_Csv_import_manage_issues_link = 'Importer un fichier CSV';
 $s_plugin_Csv_import_manage_issues = 'Import CSV';
-$s_plugin_Csv_import_issues_file = 'Importer des bogues depuis le fichier CSV';
+$s_plugin_Csv_import_issues_file = 'Importer des bogues depuis un fichier CSV';
 $s_plugin_Csv_import_issues_columns = 'Colonnes du fichier';
 $s_plugin_Csv_import_skip_first_line = 'Ignorer la première ligne';
 $s_plugin_Csv_import_file_button = 'Importer le fichier';
