@@ -32,9 +32,7 @@
 		plugin_error( ERROR_FILE_FORMAT, ERROR );
 	}
 
-	$t_file_line_num = -1;
 	foreach( $t_file_content as $t_key => &$t_file_line ) {
-		$t_file_line_num++;
 		$t_elements = read_csv_row( $t_file_line, $t_separator );
 		if( $t_column_count < 0 ) {
 			if( count( $t_elements ) <= 1 ) {
@@ -46,7 +44,7 @@
 				plugin_error( ERROR_FILE_FORMAT, ERROR );
 			}
 			elseif (
-				$t_trim_rows && (trim(eregi_replace($t_separator , '' , implode($t_separator , $t_elements))) == '')
+				$t_trim_rows && (trim(implode(' ' , $t_elements)) == '')
 			) {
 				if( $t_skip_first ) {
 					error_parameters( plugin_lang_get('error_empty_header' ) );
@@ -81,12 +79,10 @@
 		}
 
 		if (
-			trim(eregi_replace($t_separator , '' , implode($t_separator , $t_elements))) == ''
+			$t_trim_rows && trim(implode(' ' , $t_elements)) == ''
 		) {
-			if( $t_trim_rows ) {
-				unset( $t_file_content[$t_key] );
-				$t_file_content = array_merge($t_file_content);
-			}
+			unset( $t_file_content[$t_key] );
+			$t_file_content = array_merge($t_file_content);
 		}
 	}
 
@@ -146,46 +142,47 @@
 	</tr>
 	<tr class="row-category">
 	<?php
+	# Write columns labels
 	for( $i = 0; $i < $t_column_count; $i++ ) {
+		echo '<td>';
 		if( !$t_skip_first ) {
-?>
-			<td><?php echo sprintf( plugin_lang_get( 'column_number' ), $i + 1) ?></td>
-<?php
+			echo sprintf( plugin_lang_get( 'column_number' ), $i + 1);
 		}
 		else {
-?>
-			<td><?php echo prepare_output($t_column_title[$i]) ?></td>
-<?php
+			echo prepare_output($t_column_title[$i]);
 		}
+		echo '</td>';
 	}
 	?>
 	</tr>
 <?php
-		# Display first file lines
-		$t_first_run = true;
-		$t_display_max = 3;
+	# Display first file lines
+	$t_first_run = true;
+	$t_display_max = 3;
 
-		foreach( $t_file_content as &$t_file_line ) {
-			if( $t_first_run && $t_skip_first ) {
-				$t_first_run = false;
-				continue;
-			}
-
-			echo '<tr ' . helper_alternate_class() . '>';
-			if( --$t_display_max < 0 ) {
-				for( $i = 0; $i < $t_column_count; $i++ ) {
-					echo '<td>&hellip;</td>';
-				}
-				echo '</tr>';
-				break;
-			}
-			else {
-				foreach( read_csv_row( $t_file_line, $t_separator ) as $t_element ) {
-					echo '<td>' . prepare_output($t_element) . '</td>';
-				}
-			}
-			echo '</tr>';
+	foreach( $t_file_content as &$t_file_line ) {
+		# Ignore columns labels
+		if( $t_first_run && $t_skip_first ) {
+			$t_first_run = false;
+			continue;
 		}
+
+		echo '<tr ' . helper_alternate_class() . '>';
+		
+		# Still more lines (add "...")
+		if( --$t_display_max < 0 ) {
+			echo str_repeat('<td>&hellip;</td>', $t_column_count);
+			echo '</tr>';
+			break;
+		}
+		else {
+			# Write values
+			foreach( read_csv_row( $t_file_line, $t_separator ) as $t_element ) {
+				echo '<td>' . prepare_output($t_element) . '</td>';
+			}
+		}
+		echo '</tr>';
+	}
 ?>
 </table>
 
