@@ -106,31 +106,6 @@
 	# Move file
 	$t_file_name = tempnam( '', 'tmp' );
 	move_uploaded_file( $f_import_file['tmp_name'], $t_file_name );
-
-	# Column analysis
-	$t_title_is_fields = true;
-	$t_column_title = array_map( 'trim', $t_column_title );
-	foreach( $t_column_title as $t_element ) {
-		if( !isset( $g_all_fields[$t_element] ) ) {
-			$t_title_is_fields = false;
-			break;
-		}
-	}
-
-	if( !$t_title_is_fields ) {
-		$t_title_is_fields = true;
-		foreach( $t_column_title as $t_key => $t_element ) {
-			$t_found_key = array_search( $t_element, $g_all_fields );
-			if( $t_found_key !== false ) {
-				$t_column_title[$t_key] = $t_found_key;
-			}
-			else {
-				$t_title_is_fields = false;
-				break;
-			}
-		}
-	}
-	$t_title_is_fields &= count( $t_column_title ) == count( array_unique( $t_column_title ) );
 ?>
 
 <!-- File extraction -->
@@ -200,7 +175,20 @@
 		</td>
 	</tr>
 <?php
+	$t_column_title = array_map( 'trim', $t_column_title );
+
 	for( $t_fields = $g_all_fields, $i = 0; $i < $t_column_count; next( $t_fields ), $i++ ) {
+		# Find existing field
+		if( isset( $g_all_fields[$t_column_title[$i]] ))
+		{
+			$t_found_field = $t_column_title[$i];
+		}
+		else
+		{
+			$t_found_field = array_search( prepare_output($t_column_title[$i]), $g_all_fields );
+		}
+
+		# Write
 		?>
 		<tr <?php echo helper_alternate_class() ?>>
 			<td class="category">
@@ -215,7 +203,7 @@
 			</td>
 			<td>
 				<select name="columns[]">
-					<?php print_all_fields_option_list( $t_title_is_fields ? $t_column_title[$i] : key( $t_fields ) ) ?>
+					<?php print_all_fields_option_list( $t_found_field !== false ? $t_found_field : key( $t_fields ) ) ?>
 				</select>
 			</td>
 			 <td>
