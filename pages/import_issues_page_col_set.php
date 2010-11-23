@@ -90,6 +90,23 @@
 		}
 	}
 
+	if( is_writable( $f_import_file['tmp_name'] ) ) {
+		if( $handle = fopen( $f_import_file['tmp_name'], "wb" ) ) {
+			foreach( $t_file_content as &$t_file_line ) {
+				$t_written = fwrite( $handle , $t_file_line . "\n" );
+			}
+			fclose( $handle );
+		}
+		else {
+			error_parameters( plugin_lang_get( 'error_file_not_opened' ) );
+			plugin_error( ERROR_FILE_FORMAT, ERROR );
+		}
+	}
+	else {
+		error_parameters( plugin_lang_get( 'error_file_not_writable' ) );
+		plugin_error( ERROR_FILE_FORMAT, ERROR );
+	}
+
 	# Move file
 	$t_file_name = tempnam( '', 'tmp' );
 	move_uploaded_file( $f_import_file['tmp_name'], $t_file_name );
