@@ -159,6 +159,7 @@
 				for( $i = 0; $i < $t_column_count; $i++ ) {
 					echo '<td>&hellip;</td>';
 				}
+				echo '</tr>';
 				break;
 			}
 			else {
@@ -174,8 +175,8 @@
 <br />
 <!-- Set fields form -->
 <div align="center">
+<form method="post" action="<?php echo $import_it ?>">
 <table class="width50" cellspacing="1">
-	<form method="post" action="<?php echo $import_it ?>">
 	<tr>
 		<td class="form-title" colspan="2">
 			<?php echo plugin_lang_get( 'issues_columns' ) ?>
@@ -204,7 +205,7 @@
 				</select>
 			</td>
 			 <td>
-			   <input type="checkbox" name="cb_keys[<?php echo $t_column_title[$i]?>]" value="ok"/>
+				<input type="checkbox" name="cb_keys[<?php echo $t_column_title[$i]?>]" value="ok"/>
 			 </td>
 		</tr><?php
 	}
@@ -222,8 +223,8 @@
 			<input type="submit" class="button" value="<?php echo plugin_lang_get( 'file_button' ) ?>" />
 		</td>
 	</tr>
-	</form>
 </table>
+</form>
 </div>
 
 <?php
