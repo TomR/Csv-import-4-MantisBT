@@ -110,7 +110,7 @@
 	}
 
 	# Move file
-	$t_file_name = tempnam( '', 'tmp' );
+	$t_file_name = tempnam( sys_get_temp_dir(), 'tmp' );
 	move_uploaded_file( $f_import_file['tmp_name'], $t_file_name );
 ?>
 
