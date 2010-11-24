@@ -175,7 +175,7 @@ foreach( $t_file_content as $t_file_row ) {
 		$t_default->resolution = OPEN;
 		$t_default->view_state = config_get( 'default_bug_view_status' );
 		$t_default->profile_id = 0;
-		$t_default->due_date = date('Y-m-d');
+		$t_default->due_date = date_get_null();
 	} else {
 		if( !bug_exists( $t_bug_id ) ) {
 			$t_error_messages .= sprintf( plugin_lang_get( 'error_bug_not_exist' ), $t_bug_id) . '<br />';
