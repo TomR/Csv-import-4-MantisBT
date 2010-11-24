@@ -42,6 +42,6 @@ $s_plugin_Csv_import_error_any = 'Error while treating the bug "%s"';
 $s_plugin_Csv_import_error_custom_field = 'Error while importing custom field "%s" for the bug "%s"';
 
 # Errors
-$MANTIS_ERROR[plugin_Csv_import_ERROR_ALL_PROJECT] = 'A project must be selected to import issues';
-$MANTIS_ERROR[plugin_Csv_import_ERROR_FILE_FORMAT] = 'Incorrect imported file format: %s';
-$MANTIS_ERROR[plugin_Csv_import_ERROR_FILE] = 'There was an error with the file itself';
+$MANTIS_ERROR['plugin_Csv_import_ERROR_ALL_PROJECT'] = 'A project must be selected to import issues';
+$MANTIS_ERROR['plugin_Csv_import_ERROR_FILE_FORMAT'] = 'Incorrect imported file format: %s';
+$MANTIS_ERROR['plugin_Csv_import_ERROR_FILE'] = 'There was an error with the file itself';

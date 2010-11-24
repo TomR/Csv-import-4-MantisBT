@@ -42,6 +42,6 @@ $s_plugin_Csv_import_error_any = 'Bei der Verarbeitung des Problems "%s" trat ei
 $s_plugin_Csv_import_error_custom_field = 'Beim Import des benutzerdefinierten Feldes "%s" zu Problem "%s" trat ein Fehler auf';
 
 # Errors
-$MANTIS_ERROR[plugin_Csv_import_ERROR_ALL_PROJECT] = 'Es muss ein Projekt bestimmt werden, um Probleme zu importieren';
-$MANTIS_ERROR[plugin_Csv_import_ERROR_FILE_FORMAT] = 'Das Dateiformat ist nicht korrekt: %s';
-$MANTIS_ERROR[plugin_Csv_import_ERROR_FILE] = 'Die Datei ist fehlerhaft';
+$MANTIS_ERROR['plugin_Csv_import_ERROR_ALL_PROJECT'] = 'Es muss ein Projekt bestimmt werden, um Probleme zu importieren';
+$MANTIS_ERROR['plugin_Csv_import_ERROR_FILE_FORMAT'] = 'Das Dateiformat ist nicht korrekt: %s';
+$MANTIS_ERROR['plugin_Csv_import_ERROR_FILE'] = 'Die Datei ist fehlerhaft';

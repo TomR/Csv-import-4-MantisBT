@@ -42,6 +42,6 @@ $s_plugin_Csv_import_error_any = 'Erreur lors du traitement du bogue "%s"';
 $s_plugin_Csv_import_error_custom_field = 'Erreur lors de l\import du champ personnalisé "%s" pour le bogue "%s"';
 
 # Errors
-$MANTIS_ERROR[plugin_Csv_import_ERROR_ALL_PROJECT] = 'Un projet doit être sélectionné pour importer des incidents.';
-$MANTIS_ERROR[plugin_Csv_import_ERROR_FILE_FORMAT] = 'Le format du fichier importé est incorrect : %s.';
-$MANTIS_ERROR[plugin_Csv_import_ERROR_FILE] = 'Erreur rencontrée dans le fichier.';
+$MANTIS_ERROR['plugin_Csv_import_ERROR_ALL_PROJECT'] = 'Un projet doit être sélectionné pour importer des incidents.';
+$MANTIS_ERROR['plugin_Csv_import_ERROR_FILE_FORMAT'] = 'Le format du fichier importé est incorrect : %s.';
+$MANTIS_ERROR['plugin_Csv_import_ERROR_FILE'] = 'Erreur rencontrée dans le fichier.';

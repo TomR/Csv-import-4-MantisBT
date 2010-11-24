@@ -3,7 +3,7 @@
 $g_project_id = helper_get_current_project();
 if( $g_project_id == ALL_PROJECTS )
 {
-	plugin_error( ERROR_ALL_PROJECT, ERROR );
+	plugin_error( 'ERROR_ALL_PROJECT', ERROR );
 }
 
 # This identify a custom field

@@ -13,7 +13,7 @@ require_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'import_issues_inc.php
 # Check a project is selected
 $g_project_id = helper_get_current_project();
 if( $g_project_id == ALL_PROJECTS ) {
-	plugin_error( ERROR_ALL_PROJECT, ERROR );
+	plugin_error( 'ERROR_ALL_PROJECT', ERROR );
 }
 
 # Get submitted data
@@ -44,7 +44,7 @@ if( file_exists( $f_import_file ) ) {
 	$t_file_content = read_csv_file( $f_import_file );
 } else {
 	error_parameters( plugin_lang_get( 'error_file_not_found' ) );
-	plugin_error( ERROR_FILE_FORMAT, ERROR );
+	plugin_error( 'ERROR_FILE_FORMAT', ERROR );
 }
 
 # Check given parameters - Columns
@@ -52,7 +52,7 @@ if( count( $f_columns ) <= 0 ) {
 	trigger_error( ERROR_EMPTY_FIELD, ERROR );
 } 	elseif( count( $f_columns ) != count( array_unique( $f_columns ) ) ) {
 	error_parameters( plugin_lang_get( 'error_col_multiple' ) );
-	plugin_error( ERROR_FILE_FORMAT, ERROR );
+	plugin_error( 'ERROR_FILE_FORMAT', ERROR );
 }
 
 # Some default values for filter

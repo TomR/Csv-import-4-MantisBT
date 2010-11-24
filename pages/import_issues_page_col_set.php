@@ -29,26 +29,30 @@
 	$t_column_title = array();
 	if( count( $t_file_content ) <= 0 ) {
 		error_parameters( plugin_lang_get( 'error_nolines' ) );
-		plugin_error( ERROR_FILE_FORMAT, ERROR );
+		plugin_error( 'ERROR_FILE_FORMAT', ERROR );
 	}
 
 	foreach( $t_file_content as $t_key => &$t_file_line ) {
 		$t_elements = read_csv_row( $t_file_line, $t_separator );
+
+		# First line
 		if( $t_column_count < 0 ) {
+			#  If 0 or 1 column
 			if( count( $t_elements ) <= 1 ) {
 				error_parameters( sprintf( plugin_lang_get( 'error_noseparator' ), $t_separator) );
-				plugin_error( ERROR_FILE_FORMAT, ERROR );
+				plugin_error( 'ERROR_FILE_FORMAT', ERROR );
 			}
+			# If more columns than possible for Mantis
 			elseif( count( $t_elements ) > count( $g_all_fields ) ) {
 				error_parameters( plugin_lang_get( 'error_manycols' ) );
-				plugin_error( ERROR_FILE_FORMAT, ERROR );
+				plugin_error( 'ERROR_FILE_FORMAT', ERROR );
 			}
 			elseif (
 				$t_trim_rows && (trim(implode(' ' , $t_elements)) == '')
 			) {
 				if( $t_skip_first ) {
 					error_parameters( plugin_lang_get('error_empty_header' ) );
-					plugin_error( ERROR_FILE_FORMAT, ERROR );
+					plugin_error( 'ERROR_FILE_FORMAT', ERROR );
 				}
 				else {
 					$t_file_line = null;
@@ -66,6 +70,8 @@
 			$t_column_count = count( $t_elements );
 			$t_column_title = $t_elements;
 		}
+
+		# Other lines
 		elseif( $t_column_count != count( $t_elements ) ) {
 			if( $t_trim_columns ) { # @@@ u.sommer added
 				$t_row = explode( $t_separator , $t_file_line );
@@ -74,7 +80,7 @@
 			}
 			else {
 				error_parameters( sprintf( plugin_lang_get( 'error_col_count' ), $t_separator) );
-				plugin_error( ERROR_FILE_FORMAT, ERROR );
+				plugin_error( 'ERROR_FILE_FORMAT', ERROR );
 			}
 		}
 
@@ -95,12 +101,12 @@
 		}
 		else {
 			error_parameters( plugin_lang_get( 'error_file_not_opened' ) );
-			plugin_error( ERROR_FILE_FORMAT, ERROR );
+			plugin_error( 'ERROR_FILE_FORMAT', ERROR );
 		}
 	}
 	else {
 		error_parameters( plugin_lang_get( 'error_file_not_writable' ) );
-		plugin_error( ERROR_FILE_FORMAT, ERROR );
+		plugin_error( 'ERROR_FILE_FORMAT', ERROR );
 	}
 
 	# Move file
