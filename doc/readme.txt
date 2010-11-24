@@ -6,6 +6,12 @@ _________
 
 Version | Author                 | Action
 --------------------------------------------------------------------------------------
+ 1.3.0b | lionheart33806         | Added "primay key" feature
+        | (sorry for my english) | Bug fixes (updates were impossible, sometimes first column was ignored)
+        |                        | Removed "alternative import" feature (original import is RFC compliant !!)
+        |                        | Column detection is less strict
+        |                        | Some HTML and PHP format corrections
+        |                        | Corrected some errors display
  1.2.0  | lionheart33806         | import_issues_page.php splitted to become
         |                        |  import_issues_page_init.php and import_issues_page_col_set.php
         |                        | Can create unknown categories
@@ -61,17 +67,31 @@ ______
 Take care that this importing functionality can make a mess in your database. It is recommanded that you make
 a backup of your database before importing.
 
-1. In the manager menu, select Import Issues.
 
-2. Select the file to import. Your file must be in a correct CSV format, and must only contain importable
-   columns. The first line of the file can be a title line. If you are using standard column names, or the
+1. In the "Manage" menu, select "Import CSV file".
+
+2. Select the file to import. Your file must be in a correct CSV format (see above), and must only contain importable
+   columns. The first line of the file can be a title line. In that case do
+   not forget to select "Skip first line". If you are using standard column names, or the
 	 name of the columns as given in your current language, it will be reconized by the importer.
 
 3. Select the "Import file" button.
 
-4. If the importer did not detect your columns automatically, select them. If your first row is a title, do
-   not forget to select "Skip first line".
+4. If the importer did not detect your columns automatically, select them. Please, always verify the columns.
+	If you import many times from an another bug tracker, you should previously create a custom field which will
+	contain the other bug tracker bug id. Then, check in "Primay key" column the line corresponding  to
+	the custom field.
 
 5. Select the "Import" button.
 
 6. Review the results to ensure they are as expected.
+
+
+About CSV format :
+__________________
+
+Be sure your file is RFC compliant
+Look at :
+http://tools.ietf.org/html/rfc4180
+or
+http://en.wikipedia.org/wiki/Comma-separated_values
