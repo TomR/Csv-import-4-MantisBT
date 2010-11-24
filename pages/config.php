@@ -4,6 +4,10 @@ access_ensure_global_level( config_get( 'manage_plugin_threshold' ) );
 html_page_top1( plugin_lang_get( 'title' ) );
 html_page_top2();
 print_manage_menu();
+
+# TODO : Understand the warning ...
+$t_import_issues_treshold = plugin_config_get( 'import_issues_treshold' );
+
 ?>
 <br/>
 <form action="<?php echo plugin_page( 'config_edit' ) ?>" method="post">
@@ -19,7 +23,7 @@ print_manage_menu();
 	</td>
 	<td>
 		<select name="import_issues_trshold">
-			<?php print_enum_string_option_list( 'access_levels', plugin_config_get( 'import_issues_treshold' ) ) ?>
+			<?php print_enum_string_option_list( 'access_levels', $t_import_issues_treshold ) ?>
 		</select>
 	</td>
 </tr> 
@@ -28,9 +32,8 @@ print_manage_menu();
 		<input type="submit" class="button" value="<?php echo plugin_lang_get( 'update_config' ) ?>" />
 	</td>
 </tr>
-
 </table>
-<form>
+</form>
 
 <?php
 html_page_bottom1( __FILE__ );
