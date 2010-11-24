@@ -32,7 +32,7 @@ $t_linked_ids = custom_field_get_linked_ids( $g_project_id );
 # Get custom field id of primary keys
 foreach($t_linked_ids as $cf_id) {
 	$t_def = custom_field_get_definition($cf_id);
-	$t_custom_col_name = 'custom_'.$t_def['name'];
+	$t_custom_col_name = $g_custom_field_identifier . $t_def['name'];
 
 	if(isset($f_keys[$t_custom_col_name]))
 	{
@@ -115,7 +115,7 @@ foreach( $t_file_content as $t_file_row ) {
 			$t_values_for_error = array();
 			foreach($f_keys as $aKey => $v)
 			{
-				if(substr($aKey, 0, 7) != 'custom_')
+				if(substr($aKey, 0, strlen($g_custom_field_identifier)) != $g_custom_field_identifier)
 				{
 					$t_filter[$aKey] = array(get_column_value( $aKey, $t_file_row, '' ));
 					$t_values_for_error[] = $t_filter[$aKey][0];
@@ -268,7 +268,7 @@ foreach( $t_file_content as $t_file_row ) {
 		foreach( $t_linked_ids as &$t_id ) {
 			# Look if this field is set
 			$t_def = custom_field_get_definition( $t_id );
-			$t_custom_col_name = 'custom_'.$t_def['name'];
+			$t_custom_col_name = $g_custom_field_identifier . $t_def['name'];
 			if( !column_value_exists( $t_custom_col_name , $t_file_row ) ) {
 				continue;
 			}
