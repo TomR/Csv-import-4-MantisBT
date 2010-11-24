@@ -21,8 +21,6 @@ $f_create_unknown_cats = gpc_get_bool( 'cb_create_unknown_cats' );
 $f_import_file = gpc_get_string( 'import_file' );
 $f_columns = gpc_get_string_array( 'columns' );
 $f_skip_first = gpc_get_bool( 'cb_skip_first_line' );
-$f_skip_blank_lines = gpc_get_bool( 'cb_skip_blank_lines' );
-$f_trim_columns = gpc_get_bool( 'cb_trim_blank_cols' );
 $f_separator = gpc_get_string('edt_cell_separator');
 $f_keys = gpc_get_string_array( 'cb_keys', array() );
 

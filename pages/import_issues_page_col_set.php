@@ -143,7 +143,7 @@
 		}
 
 		echo '<tr ' . helper_alternate_class() . '>';
-		
+
 		# Still more lines (add "...")
 		if( --$t_display_max < 0 ) {
 			echo str_repeat('<td>&hellip;</td>', $t_column_count);

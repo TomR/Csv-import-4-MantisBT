@@ -276,13 +276,13 @@ function get_category_column_value( $p_name, $p_row, $p_project, $p_default ) {
  */
 function hvar_dump()
 {
-   $numargs = func_num_args();
-   $arg_list = func_get_args();
-   echo '<pre style="text-align: left;">';
-   for ($i = 0; $i < $numargs; $i++)
-   {
-        var_dump($arg_list[$i]);
-   }
+	$numargs = func_num_args();
+	$arg_list = func_get_args();
+	echo '<pre style="text-align: left;">';
+	for ($i = 0; $i < $numargs; $i++)
+	{
+		var_dump($arg_list[$i]);
+	}
 
-   echo '</pre>';
+	echo '</pre>';
 }
