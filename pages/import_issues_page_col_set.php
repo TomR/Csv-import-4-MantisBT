@@ -191,7 +191,7 @@
 		}
 		else
 		{
-			$t_found_field = array_search( prepare_output($t_column_title[$i]), $g_all_fields );
+			$t_found_field = array_isearch( prepare_output($t_column_title[$i]), $g_all_fields );
 		}
 
 		# Write
