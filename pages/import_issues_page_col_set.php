@@ -228,12 +228,37 @@
 			<input type="hidden" name="edt_cell_separator" value="<?php echo $t_separator ?>" />
 			<input type="hidden" name="cb_create_unknown_cats" value="<?php echo $t_create_unknown_cats ?>" />
 			<input type="hidden" name="import_file" value="<?php echo $t_file_name ?>" />
-			<input type="submit" class="button" value="<?php echo plugin_lang_get( 'file_button' ) ?>" />
+			<input type="submit" id="importForm" class="button" value="<?php echo plugin_lang_get( 'file_button' ) ?>" onclick="return checkFields();" />
 		</td>
 	</tr>
 </table>
 </form>
+<script type="text/javascript">
+function checkFields() {
+	var allDropdowns = document.getElementsByName("columns[]");
+	var dropdownArray = [];
+	var dupeArray = [];
+	var dupeCnt = 0;
+	for(var x = 0; x < allDropdowns.length; x++) {
+		var currentDropdown = allDropdowns[x].options[allDropdowns[x].options.selectedIndex];
+		if (dropdownArray.indexOf(currentDropdown.value) < 0) {
+			dropdownArray[x] = currentDropdown.value;
+		} else if (currentDropdown.value != 'ignore_column') {
+			dupeArray[dupeCnt] = currentDropdown.text;
+			dupeCnt++;
+		}
+	}
+	if (dupeArray.length > 0) {
+		alert('The following fields have been selected for more than one column:\r\n\r\n' + dupeArray.toString().replace(/,/g, "\r\n"));
+		return false;
+	} else {
+		return true;
+	}
+}
+</script>
 </div>
+
+
 
 <?php
 
