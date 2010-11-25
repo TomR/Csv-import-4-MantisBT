@@ -53,7 +53,7 @@ config_get( 'max_file_size' ) );
 
          <tr class="row-1">
             <td class="category" style="text-align:center">
-               <input type="checkbox" name="cb_trim_blank_cols" value="1" checked="checked"/>
+               <input type="checkbox" name="cb_trim_blank_cols" value="1"/>
             </td>
             <td colspan="4">
                <?php echo plugin_lang_get( 'skip_blank_columns' ) ?>
