@@ -50,7 +50,17 @@ if( file_exists( $f_import_file ) ) {
 # Check given parameters - Columns
 if( count( $f_columns ) <= 0 ) {
 	trigger_error( ERROR_EMPTY_FIELD, ERROR );
-} 	elseif( count( $f_columns ) != count( array_unique( $f_columns ) ) ) {
+}
+
+# ignore_column have to be ... ignored
+foreach ($f_columns as $key => $value) {
+	if ($value == 'ignore_column') {
+		unset($f_columns[$key]);
+	}
+}
+
+# Other columns check
+if( count( $f_columns ) != count( array_unique( $f_columns ) ) ) {
 	error_parameters( plugin_lang_get( 'error_col_multiple' ) );
 	plugin_error( 'ERROR_FILE_FORMAT', ERROR );
 }
