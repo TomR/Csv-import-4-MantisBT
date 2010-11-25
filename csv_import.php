@@ -4,7 +4,7 @@ class Csv_importPlugin extends MantisPlugin
 	function register() {
 		$this->name = plugin_lang_get( 'title' );
 		$this->description = plugin_lang_get( 'description' );
-		$this->version = '1.2.0';
+		$this->version = '1.3.0b';
 		$this->requires = array( 'MantisCore' => '1.2.0' );
 		$this->author = 'Udo Sommer, see readme for further details!';
 		$this->contact = '';
