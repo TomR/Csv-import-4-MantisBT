@@ -1,17 +1,13 @@
 <?php
 
 # Custom strings for french language
-$s_plugin_Csv_import_title		= 'Importeur CSV Mantis';
+$s_plugin_Csv_import_title = 'Importeur CSV Mantis';
 $s_plugin_Csv_import_description = 'Importe des fichiers CSV comme bogues Mantis';
-$s_plugin_Csv_import_config	= 'Configuration';
-$s_plugin_Csv_import_update_config	= 'Mettre la configuration à jour';
-
-# Extensions by u.sommer
+$s_plugin_Csv_import_config = 'Configuration';
+$s_plugin_Csv_import_update_config = 'Mettre la configuration à jour';
 $s_plugin_Csv_import_file_format_col_spacer = 'Séparateur de colonnes CSV';
 $s_plugin_Csv_import_skip_blank_lines = 'Ignorer les lignes vides';
 $s_plugin_Csv_import_skip_blank_columns = 'Ignorer toutes les colonnes avec un en-tête vide';
-
-# Extensions by lionheart33806
 $s_plugin_Csv_import_create_unknown_cats = 'Créer automatiquement les catégories inconnues';
 $s_plugin_Csv_import_tab_csv_separator = 'Utiliser la tabulation';
 $s_plugin_Csv_import_error_keys = 'La clé "%s" existe sur plusieurs bugs : %s';
@@ -40,6 +36,7 @@ $s_plugin_Csv_import_error_bug_not_exist = 'Le bogue %d n\'existe pas';
 $s_plugin_Csv_import_error_bug_bad_project = 'Le bogue %d n\'est pas dans le projet courrant';
 $s_plugin_Csv_import_error_any = 'Erreur lors du traitement du bogue "%s"';
 $s_plugin_Csv_import_error_custom_field = 'Erreur lors de l\import du champ personnalisé "%s" pour le bogue "%s"';
+$s_plugin_Csv_import_error_col_select_multiple = 'Les champs suivants ont sélectionnés pour plus d\'une fois :';
 
 # Errors
 $MANTIS_ERROR['plugin_Csv_import_ERROR_ALL_PROJECT'] = 'Un projet doit être sélectionné pour importer des incidents.';

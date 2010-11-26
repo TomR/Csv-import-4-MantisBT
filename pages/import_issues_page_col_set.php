@@ -249,7 +249,7 @@ function checkFields() {
 		}
 	}
 	if (dupeArray.length > 0) {
-		alert('The following fields have been selected for more than one column:\r\n\r\n' + dupeArray.toString().replace(/,/g, "\r\n"));
+		alert('<?php echo str_replace('\'', '\\\'', plugin_lang_get( 'error_col_select_multiple' )) ?>\r\n\r\n' + dupeArray.toString().replace(/,/g, "\r\n"));
 		return false;
 	} else {
 		return true;

@@ -5,13 +5,9 @@ $s_plugin_Csv_import_title = 'Mantis CSV Import Probleme';
 $s_plugin_Csv_import_description = 'Import CSV files as Mantis issues';
 $s_plugin_Csv_import_config = 'Konfiguration';
 $s_plugin_Csv_import_update_config = 'Aktualisiere Konfiguration';
-
-# Extensions by u.sommer
 $s_plugin_Csv_import_file_format_col_spacer = 'CSV Spalten Trennzeichen';
 $s_plugin_Csv_import_skip_blank_lines = 'leere Zeilen auslassen';
 $s_plugin_Csv_import_skip_blank_columns = 'alle Spalten, die einem leeren Eintrag folgen, auslassen';
-
-# Extensions by lionheart33806
 $s_plugin_Csv_import_create_unknown_cats = 'Create unknown categories';
 $s_plugin_Csv_import_tab_csv_separator = 'Use tab';
 $s_plugin_Csv_import_error_keys = 'The key "%s" exists on many bugs : %s';
@@ -40,6 +36,7 @@ $s_plugin_Csv_import_error_bug_not_exist = 'Das Problem %d existiert nicht';
 $s_plugin_Csv_import_error_bug_bad_project = 'Das Problem %d ist nicht im aktuellen Projekt enthalten';
 $s_plugin_Csv_import_error_any = 'Bei der Verarbeitung des Problems "%s" trat ein Fehler auf';
 $s_plugin_Csv_import_error_custom_field = 'Beim Import des benutzerdefinierten Feldes "%s" zu Problem "%s" trat ein Fehler auf';
+$s_plugin_Csv_import_error_col_select_multiple = 'The following fields have been selected for more than one column:';
 
 # Errors
 $MANTIS_ERROR['plugin_Csv_import_ERROR_ALL_PROJECT'] = 'Es muss ein Projekt bestimmt werden, um Probleme zu importieren';
