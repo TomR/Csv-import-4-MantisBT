@@ -284,7 +284,8 @@ foreach( $t_file_content as $t_file_row ) {
 			# Prepare value
 			$t_value = get_column_value( $t_custom_col_name , $t_file_row );
 			if( ($t_value != '') && ($t_def['type'] == CUSTOM_FIELD_TYPE_DATE) ) {
-				$t_value = strtotime( $t_value );
+				$t_value = is_numeric($t_value) ? $t_value : strtotime($t_value);
+			}
 			}
 
 			# Import value
