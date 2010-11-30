@@ -143,7 +143,7 @@ function prepare_output( $t_string , $t_encode_only = false ) {
 function get_csv_import_category_id( $t_project_id , $t_category_name ) {
 	project_ensure_exists( $t_project_id );
 
-	$t_category_id = category_get_id_by_name_NE($t_category_name , $t_project_id);
+	$t_category_id = category_get_id_by_name_ne($t_category_name , $t_project_id);
 	if( !$t_category_id )
 	{
 		return category_add( $t_project_id, $t_category_name );

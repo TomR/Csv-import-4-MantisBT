@@ -33,7 +33,7 @@ Version | Author                 | Action
 Know Issues:
 ____________
 
-* "ignore_column" can only be used once.
+* Please, see https://github.com/lionheart33806/Csv-import-4-MantisBT/issues
 
 
 Licence:

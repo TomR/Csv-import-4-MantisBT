@@ -166,111 +166,170 @@ foreach( $t_file_content as $t_file_row ) {
 
 	# Set default parameters
 	if( $t_bug_id === null ) {
-		# Category
-		$t_cat_val =  trim ( get_column_value( 'category', $t_file_row ) );
-		$t_cat_val = ($f_create_unknown_cats && $t_cat_val != '') ? $t_cat_val : 'csv_imported';
-
 		#Default bug will be with default values
-		$t_default = new BugData;
+		$t_bug_data = new BugData;
 
-		$t_default->project_id			= $g_project_id;
-		$t_default->category_id			= get_csv_import_category_id($g_project_id, $t_cat_val);
-		$t_default->reporter_id			= auth_get_current_user_id();
-		$t_default->priority				= config_get( 'default_bug_priority' );
-		$t_default->severity				= config_get( 'default_bug_severity' );
-		$t_default->reproducibility 	= config_get( 'default_bug_reproducibility' );
-		$t_default->date_submitted		= date('Y-m-d G:i:s');
-		$t_default->handler_id			= auth_get_current_user_id();
-		$t_default->status				= config_get( 'bug_submit_status' );
-		$t_default->resolution			= OPEN;
-		$t_default->view_state			= config_get( 'default_bug_view_status' );
-		$t_default->profile_id			= 0;
-		$t_default->due_date				= date_get_null();
+		$t_bug_data->project_id			= $g_project_id;
+		$t_bug_data->category_id		= get_csv_import_category_id($g_project_id, 'csv_imported');
+		$t_bug_data->reporter_id		= auth_get_current_user_id();
+		$t_bug_data->priority			= config_get( 'default_bug_priority' );
+		$t_bug_data->severity			= config_get( 'default_bug_severity' );
+		$t_bug_data->reproducibility	= config_get( 'default_bug_reproducibility' );
+		$t_bug_data->date_submitted	= date('Y-m-d G:i:s');
+		$t_bug_data->handler_id			= auth_get_current_user_id();
+		$t_bug_data->status				= config_get( 'bug_submit_status' );
+		$t_bug_data->resolution			= OPEN;
+		$t_bug_data->view_state			= config_get( 'default_bug_view_status' );
+		$t_bug_data->profile_id			= 0;
+		$t_bug_data->due_date			= date_get_null();
 	} else {
 		if( !bug_exists( $t_bug_id ) ) {
 			$t_error_messages .= sprintf( plugin_lang_get( 'error_bug_not_exist' ), $t_bug_id) . '<br />';
 			$t_failure_count++;
 			continue;
 		}
-		$t_default = bug_get( $t_bug_id, true );
-		if( $t_default->project_id != $g_project_id ) {
+		$t_bug_data = bug_get( $t_bug_id, true );
+		if( $t_bug_data->project_id != $g_project_id ) {
 			$t_error_messages .= sprintf( plugin_lang_get( 'error_bug_bad_project' ), $t_bug_id) . '<br />';
 			$t_failure_count++;
 			continue;
 		}
 	}
 
-	# Set bug data
-	$t_bug_data = new BugData;
+	$fields = array();
 
-	$t_bug_data->id						= $t_bug_id;
-	$t_bug_data->project_id				= $t_default->project_id;
-	$t_bug_data->reporter_id			= get_user_column_value( 'reporter_id', $t_file_row, $t_default->reporter_id );
-	$t_bug_data->summary					= get_column_value( 'summary', $t_file_row, $t_default->summary );
-	$t_bug_data->category_id			= get_category_column_value('category', $t_file_row, $t_bug_data->project_id , $t_default->category_id );
-	$t_bug_data->priority				= get_enum_column_value( 'priority', $t_file_row, $t_default->priority );
-	$t_bug_data->severity				= get_enum_column_value( 'severity', $t_file_row, $t_default->severity );
-	$t_bug_data->reproducibility		= get_enum_column_value( 'reproducibility', $t_file_row, $t_default->reproducibility );
-	$t_bug_data->date_submitted		= get_date_column_value( 'date_submitted', $t_file_row, $t_default->date_submitted );
-	$t_bug_data->last_updated			= get_date_column_value( 'last_updated', $t_file_row, $t_default->last_updated );
-	$t_bug_data->handler_id				= get_user_column_value( 'handler_id', $t_file_row, $t_default->handler_id );
-	$t_bug_data->status					= get_enum_column_value( 'status', $t_file_row, $t_default->status );
-	$t_bug_data->resolution				= get_enum_column_value( 'resolution', $t_file_row, $t_default->resolution );
-	$t_bug_data->os						= get_column_value( 'os', $t_file_row, $t_default->os );
-	$t_bug_data->os_build				= get_column_value( 'os_build', $t_file_row, $t_default->os_build );
-	$t_bug_data->platform				= get_column_value( 'platform', $t_file_row, $t_default->platform );
-	$t_bug_data->version					= get_column_value( 'version', $t_file_row, $t_default->version );
-	$t_bug_data->projection				= get_enum_column_value( 'projection', $t_file_row, $t_default->projection );
-	$t_bug_data->eta						= get_enum_column_value( 'eta', $t_file_row, $t_default->eta );
-	$t_bug_data->fixed_in_version		= get_column_value( 'fixed_in_version', $t_file_row, $t_default->fixed_in_version );
-	$t_bug_data->target_version		= get_column_value( 'target_version', $t_file_row, $t_default->target_version );
-	$t_bug_data->build					= get_column_value( 'build', $t_file_row, $t_default->build );
-	$t_bug_data->duplicate_id			= $t_default->duplicate_id;
-	$t_bug_data->view_state				= get_enum_column_value( 'view_state', $t_file_row, $t_default->view_state );
-	$t_bug_data->sponsorship_total	= $t_default->sponsorship_total;
-	$t_bug_data->profile_id				= $t_default->profile_id;
-	$t_bug_data->due_date				= get_date_column_value( 'due_date', $t_file_row, $t_default->due_date );
+	# Determine 'reporter_id' field
+	$fields['reporter_id']			= get_user_column_value( 'reporter_id', $t_file_row, '' );
 
-	$t_bug_data->description			= get_column_value( 'description', $t_file_row, '' );
-	$t_bug_data->steps_to_reproduce	= get_column_value( 'steps_to_reproduce', $t_file_row, '' );
-	$t_bug_data->additional_information	= get_column_value( 'additional_information', $t_file_row, '' );
+	# Determine 'summary' field
+	$fields['summary']				= get_column_value( 'summary', $t_file_row, '' );
 
-	# Create or update bug
+	# Determine 'category_id' field
+	$fields['category_id']			= get_category_column_value('category', $t_file_row, $t_bug_data->project_id , '' );
+	if( $fields['category_id'] == '' ) {
+		$t_cat = trim ( get_column_value( 'category', $t_file_row ) );
+		if( $t_cat != '' && $f_create_unknown_cats ) {
+			get_csv_import_category_id($g_project_id, $t_cat);
+			$fields['category_id']	= get_category_column_value('category', $t_file_row, $t_bug_data->project_id , '' );
+		}
+	}
+
+	# Determine 'priority' field
+	$fields['priority']				= get_enum_column_value( 'priority', $t_file_row, '' );
+
+	# Determine 'severity' field
+	$fields['severity']				= get_enum_column_value( 'severity', $t_file_row, '' );
+
+	# Determine 'reproducibility' field
+	$fields['reproducibility']		= get_enum_column_value( 'reproducibility', $t_file_row, '' );
+
+	# Determine 'date_submitted' field
+	$fields['date_submitted']		= get_date_column_value( 'date_submitted', $t_file_row, '' );
+
+	# Determine 'last_updated' field
+	$fields['last_updated']			= get_date_column_value( 'last_updated', $t_file_row, '' );
+
+	# Determine 'handler_id' field
+	$fields['handler_id']			= get_user_column_value( 'handler_id', $t_file_row, '' );
+
+	# Determine 'status' field
+	$fields['status']					= get_column_value( 'status', $t_file_row );
+	if($fields['status'] != '' && !is_numeric($fields['status'])) {
+		$fields['status']				= get_enum_column_value( 'status', $t_file_row, '' );
+	}
+
+	# Determine 'resolution' field
+	$fields['resolution']			= get_column_value('resolution', $t_file_row);
+	if($fields['resolution'] != '' && !is_numeric($fields['resolution'])) {
+		$fields['resolution']		= get_enum_column_value( 'resolution', $t_file_row, '' );
+	}
+
+	# Determine 'os' field
+	$fields['os']						= get_column_value( 'os', $t_file_row, '' );
+
+	# Determine 'os_build' field
+	$fields['os_build']				= get_column_value( 'os_build', $t_file_row, '' );
+
+	# Determine 'platform' field
+	$fields['platform']				= get_column_value( 'platform', $t_file_row, '' );
+
+	# Determine 'version' field
+	$fields['version']				= get_column_value( 'version', $t_file_row, '' );
+
+	# Determine 'projection' field
+	$fields['projection']			= get_enum_column_value( 'projection', $t_file_row, '' );
+
+	# Determine 'eta' field
+	$fields['eta']						= get_enum_column_value( 'eta', $t_file_row, '' );
+
+	# Determine 'target_version' field
+	$fields['target_version']		= get_column_value( 'target_version', $t_file_row, '' );
+
+	# Determine 'build' field
+	$fields['build']					= get_column_value( 'build', $t_file_row, '' );
+
+	# Determine 'view_state' field
+	$fields['view_state']			= get_enum_column_value( 'view_state', $t_file_row, '' );
+
+	# Determine 'due_date' field
+	$fields['due_date']				= get_date_column_value( 'due_date', $t_file_row, '' );
+
+	# Determine 'description' field
+	$fields['description']			= get_column_value( 'description', $t_file_row, '' );
+
+	# Determine 'steps_to_reproduce' field
+	$fields['steps_to_reproduce']	= get_column_value( 'steps_to_reproduce', $t_file_row, '' );
+
+	# Determine 'additional_information' field
+	$fields['additional_information'] = get_column_value( 'additional_information', $t_file_row, '' );
+
+	# Determine 'additional_information' field
+	$fields['fixed_in_version']	= get_column_value('fixed_in_version', $t_file_row, '');
+
+	# Affect changes
+	$detectChanges = false;
+	# 'date_submitted' and 'last_updated' have to be updated differently
+	$exceptions = array('date_submitted', 'last_updated');
+	foreach($fields as $k => $v) {
+		if( !in_array($k, $exceptions)) {
+			if( $v != '') {
+				if( $t_bug_id === null || $t_bug_data->$k != $v ) {
+					$detectChanges = true;
+					$t_bug_data->$k = $v;
+				}
+			}
+		}
+	}
+
+	# Create or update bug on DB
 	if( $t_bug_id === null) {
 		$t_bug_id = $t_bug_data->create();
 	} else {
-		if( !$t_bug_data->update( true, ( false == $t_notify ) ) ){
+		if( $detectChanges && !$t_bug_data->update( true, ( false == $t_notify ) ) ){
 			$t_bug_id = null;
 		}
 	}
 
-	# Update other bug data
+	# Update other bug fields
 	if( $t_bug_id !== null ) {
+
+		# Exceptions (dates) have to be updated differently
+		foreach($exceptions as $aException) {
+			# In import ?
+			if($fields[$aException] != '') {
+				# Get timestamp
+				$t_time = is_numeric($fields[$aException]) ?
+																$fields[$aException] :
+																strtotime($fields[$aException]);
+				# Different from bug ?
+				if($t_bug_data->$aException != $t_time) {
+					bug_set_field( $t_bug_id, 'date_submitted', $t_time );
+				}
+			}
+		}
+
 		# Variables
 		$t_error = false;
-		$t_default = bug_get( $t_bug_id, true );
-
-		# Setting values
-		if( $t_bug_data->status != $t_default->status
-				&& column_value_exists( 'status', $t_file_row ) ) {
-			bug_set_field( $t_bug_id, 'status', $t_bug_data->status );
-		}
-		if( $t_bug_data->resolution != $t_default->resolution
-				&& column_value_exists( 'resolution', $t_file_row ) ) {
-			bug_set_field( $t_bug_id, 'resolution', $t_bug_data->resolution );
-		}
-		if( $t_bug_data->target_version != $t_default->target_version ) {
-			bug_set_field( $t_bug_id, 'target_version', $t_bug_data->target_version );
-		}
-		if( $t_bug_data->fixed_in_version != $t_default->fixed_in_version ) {
-			bug_set_field( $t_bug_id, 'fixed_in_version', $t_bug_data->fixed_in_version );
-		}
-		if( $t_bug_data->date_submitted != $t_default->date_submitted
-				&& column_value_exists( 'date_submitted', $t_file_row ) ) {
-			bug_set_field( $t_bug_id, 'date_submitted', is_numeric($t_bug_data->date_submitted) ?
-																$t_bug_data->date_submitted :
-																strtotime($t_bug_data->date_submitted) );
-		}
 
 		# Import custom fields
 		foreach( $t_linked_ids as &$t_id ) {
@@ -286,12 +345,20 @@ foreach( $t_file_content as $t_file_row ) {
 			if( ($t_value != '') && ($t_def['type'] == CUSTOM_FIELD_TYPE_DATE) ) {
 				$t_value = is_numeric($t_value) ? $t_value : strtotime($t_value);
 			}
+
+			# Have to be different
+			if( $t_value == custom_field_get_value( $t_id, $t_bug_id) ) {
+				continue;
 			}
 
 			# Import value
 			if( !custom_field_set_value( $t_id, $t_bug_id, $t_value ) ) {
 				$t_error_messages .= sprintf( plugin_lang_get( 'error_custom_field' ), $t_def['name'], $t_bug_data->summary) . '<br />';
 				$t_error = true;
+			}
+			else {
+				# Mantis core doesn't update "last_updated" when setting custom fields
+				bug_update_date( $t_bug_id );
 			}
 		}
 
