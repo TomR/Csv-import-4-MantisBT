@@ -256,6 +256,7 @@ foreach( $t_file_content as $t_file_row ) {
 	# Determine 'resolution' field
 	$fields['resolution']			= get_column_value('resolution', $t_file_row);
 	if($fields['resolution'] != '' && !is_numeric($fields['resolution'])) {
+
 		$fields['resolution']		= get_enum_column_value( 'resolution', $t_file_row, '' );
 	}
 
@@ -314,7 +315,7 @@ foreach( $t_file_content as $t_file_row ) {
 	# 'date_submitted' and 'last_updated' have to be updated differently
 	$exceptions = array('date_submitted', 'last_updated');
 	foreach($fields as $k => $v) {
-		if( !in_array($k, $exceptions)) {
+		if( !in_array($k, $exceptions) && !isset($doNotTouch[$k])) {
 			if( $v != '') {
 				if( $t_bug_id === null || $t_bug_data->$k != $v ) {
 					$detectChanges = true;
