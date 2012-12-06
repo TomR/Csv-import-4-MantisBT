@@ -1,6 +1,13 @@
 <?php
 # Mantis - a php based bugtracking system
-
+#
+# 20121206 - francisco.mancardi@gmail.com -  
+#            fmancardi / Csv-import-4-MantisBT ISSUE #1 - 
+#            Import file with empty BUGID always end with bug id 0 does not found
+# 
+#            fmancardi / Csv-import-4-MantisBT ISSUE #2 - REQ - Option to ignore Description when updating issues
+#
+#
 require_once( 'core.php' );
 $t_core_path = config_get( 'core_path' );
 require_once( $t_core_path . 'category_api.php' );
@@ -23,6 +30,7 @@ $f_columns = gpc_get_string_array( 'columns' );
 $f_skip_first = gpc_get_bool( 'cb_skip_first_line' );
 $f_separator = gpc_get_string('edt_cell_separator');
 $f_keys = gpc_get_string_array( 'cb_keys', array() );
+$f_ignore_description_on_update = gpc_get_bool( 'cb_ignore_description_on_update' );
 
 # Load custom field ids
 $t_linked_ids = custom_field_get_linked_ids( $g_project_id );
@@ -111,6 +119,7 @@ foreach( $t_file_content as $t_file_row ) {
 	{
 		case 'by_id' :
 			$t_bug_id = get_column_value( 'id', $t_file_row );
+      $t_bug_id = intval($t_bug_id) <= 0 ? null : $t_bug_id;
 			break;
 
 		case 'by_keys' :
@@ -137,6 +146,9 @@ foreach( $t_file_content as $t_file_row ) {
 
 			$t_issues = filter_get_bug_rows( $t_page_number, $t_issues_per_page, $t_page_count, $t_issues_count, $t_filter );
 
+
+      // bvar_dump($t_issues[0]);
+      
 			switch($t_issues_count)
 			{
 				case 1:
@@ -163,6 +175,8 @@ foreach( $t_file_content as $t_file_row ) {
 		default :
 			$t_bug_id = null;
 	}
+
+	$ignoreDescription = false;
 
 	# Set default parameters
 	if( $t_bug_id === null ) {
@@ -194,6 +208,7 @@ foreach( $t_file_content as $t_file_row ) {
 			$t_failure_count++;
 			continue;
 		}
+		$ignoreDescription = $f_ignore_description_on_update;
 	}
 
 	$fields = array();
@@ -288,6 +303,14 @@ foreach( $t_file_content as $t_file_row ) {
 
 	# Affect changes
 	$detectChanges = false;
+
+	$doNotTouch = null;
+	if($ignoreDescription)
+	{
+	  $doNotTouch['description'] = 'description';
+	}
+
+
 	# 'date_submitted' and 'last_updated' have to be updated differently
 	$exceptions = array('date_submitted', 'last_updated');
 	foreach($fields as $k => $v) {

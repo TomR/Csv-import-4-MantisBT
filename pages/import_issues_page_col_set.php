@@ -1,11 +1,14 @@
 <?php
-	# Mantis - a php based bugtracking system
-	require_once( 'core.php' );
-	access_ensure_project_level( plugin_config_get( 'import_issues_threshold' ) );
-	html_page_top1( plugin_lang_get( 'manage_issues' ) );
-	html_page_top2();
-	$import_it = plugin_page('import_issues');
-	?>
+# Mantis - a php based bugtracking system
+# 20121206 - francisco.mancardi@gmail.com -  
+#            fmancardi / Csv-import-4-MantisBT ISSUE #2 - REQ - Option to ignore Description when updating issues
+#
+require_once( 'core.php' );
+access_ensure_project_level( plugin_config_get( 'import_issues_threshold' ) );
+html_page_top1( plugin_lang_get( 'manage_issues' ) );
+html_page_top2();
+$import_it = plugin_page('import_issues');
+?>
 <br />
 <?php
 	require_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'import_issues_inc.php' );
@@ -23,7 +26,8 @@
 	$t_trim_columns = gpc_get_bool( 'cb_trim_blank_cols' );
 	$t_trim_rows = gpc_get_bool( 'cb_skip_blank_lines' );
 	$t_skip_first = gpc_get_bool( 'cb_skip_first_line' );
-	$t_create_unknown_cats = gpc_get_bool( 'cb_create_unknown_cats' );
+	$t_create_unknown_cats = gpc_get_bool( 'cb_create_unknown_cats' );  
+	$t_ignore_description_on_update = gpc_get_bool( 'cb_ignore_description_on_update' );
 
 	$t_column_count = -1;
 	$t_column_title = array();
@@ -227,6 +231,7 @@
 			<input type="hidden" name="cb_trim_blank_cols" value="<?php echo $t_trim_columns ?>" />
 			<input type="hidden" name="edt_cell_separator" value="<?php echo $t_separator ?>" />
 			<input type="hidden" name="cb_create_unknown_cats" value="<?php echo $t_create_unknown_cats ?>" />
+			<input type="hidden" name="cb_ignore_description_on_update" value="<?php echo $t_ignore_description_on_update ?>" />
 			<input type="hidden" name="import_file" value="<?php echo $t_file_name ?>" />
 			<input type="submit" id="importForm" class="button" value="<?php echo plugin_lang_get( 'file_button' ) ?>" onclick="return checkFields();" />
 		</td>
