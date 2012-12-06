@@ -11,6 +11,7 @@ $s_plugin_Csv_import_skip_blank_columns = 'Skip all columns following an empty h
 $s_plugin_Csv_import_create_unknown_cats = 'Create unknown categories';
 $s_plugin_Csv_import_tab_csv_separator = 'Use tab';
 $s_plugin_Csv_import_error_keys = 'The key "%s" exists on many bugs : %s';
+$s_plugin_Csv_import_ignore_description_on_update = 'Ignore Description when updating issues';
 
 # Import issues
 $s_plugin_Csv_import_manage_issues_link = 'Import CSV file';

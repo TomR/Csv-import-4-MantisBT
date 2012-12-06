@@ -1,5 +1,9 @@
 <?php
 # Mantis - a php based bugtracking system
+#
+# 20121206 - francisco.mancardi@gmail.com -  
+#            fmancardi / Csv-import-4-MantisBT ISSUE #2 - REQ - Option to ignore Description when updating issues
+#
 require_once( 'core.php' );
 access_ensure_project_level( plugin_config_get( 'import_issues_threshold' ) );
 html_page_top1( plugin_lang_get( 'manage_issues' ) );
@@ -66,6 +70,15 @@ config_get( 'max_file_size' ) );
             </td>
             <td colspan="4">
                <?php echo plugin_lang_get( 'create_unknown_cats' ) ?>
+            </td>
+         </tr>
+
+         <tr class="row-1">
+            <td class="category" style="text-align:center">
+               <input type="checkbox" name="cb_ignore_description_on_update" value="1"/>
+            </td>
+            <td colspan="4">
+               <?php echo plugin_lang_get( 'ignore_description_on_update' ) ?>
             </td>
          </tr>
 
